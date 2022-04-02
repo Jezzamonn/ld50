@@ -1,4 +1,5 @@
 import { KeyboardKeys, RegularKeys } from "../common/keys";
+import { seededRandom } from "../common/util";
 import { Game } from "./game/game";
 
 let game: Game;
@@ -12,7 +13,9 @@ function init() {
     context = canvas.getContext("2d")!;
 
     const keys = new KeyboardKeys();
-    game = new Game(keys);
+    const rng = seededRandom("aaflafskjlasfdlasjwf");
+
+    game = new Game(keys, rng);
     keys.setUp();
 
     handleFrame();
