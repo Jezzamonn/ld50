@@ -1,5 +1,7 @@
-import { frameLength, Point } from "../../../common/common";
+import { frameLength, physFromPx, Point, pxFromPhys } from "../../../common/common";
 import { Game } from "../game";
+
+const pushSpeed = physFromPx(1 / frameLength);
 
 export class Entity {
 
@@ -12,11 +14,11 @@ export class Entity {
     dx: number = 0;
     dy: number = 0;
     dz: number = 0;
-    gravity: number = 10 / frameLength;
-    width = 10;
-    height = 10;
+    gravity: number = physFromPx(10 / frameLength);
+    width = physFromPx(10);
+    height = physFromPx(10);
 
-    dampAcceleration = 10 / frameLength;
+    dampAcceleration = physFromPx(10 / frameLength);
 
     debugColor = '#fef';
 
@@ -49,8 +51,6 @@ export class Entity {
                 }
             }
         }
-
-        const pushSpeed = 1 / frameLength;
 
         this.x += (this.dx + pushSpeed * pushDir) * dt;
         this.x = Math.round(this.x);
@@ -86,8 +86,6 @@ export class Entity {
                 }
             }
         }
-
-        const pushSpeed = 1 / frameLength;
 
         this.y += (this.dy + pushSpeed * pushDir) * dt;
         this.y = Math.round(this.y);
@@ -143,7 +141,11 @@ export class Entity {
     render(context: CanvasRenderingContext2D): void {
         if (this.debugColor) {
             context.fillStyle = this.debugColor;
-            context.fillRect(this.x, this.y + this.z, this.width, this.height);
+            context.fillRect(
+                pxFromPhys(this.x),
+                pxFromPhys(this.y + this.z),
+                pxFromPhys(this.width),
+                pxFromPhys(this.height));
         }
     }
 

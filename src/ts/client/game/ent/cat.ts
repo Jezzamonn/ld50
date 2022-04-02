@@ -1,4 +1,4 @@
-import { frameLength } from "../../../common/common";
+import { frameLength, physFromPx, physScale } from "../../../common/common";
 import { Game } from "../game";
 import { Entity } from "./entity";
 import { Holdable } from "./holdable";
@@ -6,14 +6,13 @@ import { Mouse } from "./mouse";
 
 export class Cat extends Entity {
 
-    moveSpeed = 1 / frameLength;
+    moveSpeed = physFromPx(0.3 / frameLength);
 
     constructor(game: Game) {
         super(game);
 
-        this.width = 50;
-        this.height = 50;
-        this.pushIfTouching = false;
+        this.width = physFromPx(50);
+        this.height = physFromPx(50);
     }
 
     canCollideWith(other: Entity): boolean {

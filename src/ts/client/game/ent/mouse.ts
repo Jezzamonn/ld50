@@ -1,4 +1,4 @@
-import { frameLength, Point } from "../../../common/common";
+import { frameLength, physFromPx, Point } from "../../../common/common";
 import { clamp } from "../../../common/util";
 import { Game } from "../game";
 import { Cat } from "./cat";
@@ -13,11 +13,11 @@ const ACTION_KEYS = ["Space"]
 
 export class Mouse extends Entity {
 
-    maxWalkSpeed = 3 / frameLength;
-    walkAcceleration = 50 / frameLength;
-    throwSpeed = 6 / frameLength;
+    maxWalkSpeed = physFromPx(3 / frameLength);
+    walkAcceleration = physFromPx(50 / frameLength);
+    throwSpeed = physFromPx(6 / frameLength);
 
-    rollSpeed = 6 / frameLength;
+    rollSpeed = physFromPx(6 / frameLength);
     rollCount = 0;
     rollTime = 0.3;
 
@@ -30,10 +30,10 @@ export class Mouse extends Entity {
     constructor(game: Game) {
         super(game);
 
-        this.width = 20;
-        this.height = 20;
+        this.width = physFromPx(20);
+        this.height = physFromPx(20);
 
-        this.dampAcceleration = 20 / frameLength;
+        this.dampAcceleration = physFromPx(20 / frameLength);
     }
 
     canCollideWith(other: Entity): boolean {

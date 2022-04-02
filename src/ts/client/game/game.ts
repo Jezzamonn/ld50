@@ -1,3 +1,4 @@
+import { physFromPx, physScale } from "../../common/common";
 import { RegularKeys } from "../../common/keys";
 import { rgb } from "../../common/util";
 import { Cat } from "./ent/cat";
@@ -18,20 +19,20 @@ export class Game {
 
         // Create the player and the cat
         const mouse = new Mouse(this);
-        mouse.midX = 200;
-        mouse.minY = 200;
+        mouse.midX = physFromPx(200);
+        mouse.minY = physFromPx(200);
         this.entities.push(mouse);
 
         const cat = new Cat(this);
-        cat.midX = 200;
-        cat.maxY = 200;
+        cat.midX = physFromPx(200);
+        cat.maxY = physFromPx(200);
         this.entities.push(cat);
 
         // Add a bunch of holdable things.
         for (let i = 0; i < 10; i++) {
             const holdable = new Holdable(this);
-            holdable.midX = Math.round(this.rng() * 800);
-            holdable.minY = Math.round(this.rng() * 600);
+            holdable.midX = physFromPx(Math.round(this.rng() * 800));
+            holdable.minY = physFromPx(Math.round(this.rng() * 600));
             this.entities.push(holdable);
         }
     }
