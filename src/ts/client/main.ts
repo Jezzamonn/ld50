@@ -2,6 +2,7 @@ import { Aseprite } from "../common/aseprite-js";
 import { KeyboardKeys, RegularKeys } from "../common/keys";
 import { seededRandom } from "../common/util";
 import { ClientGame } from "./game/client-game";
+import { io } from 'socket.io-client';
 
 let game: ClientGame;
 let canvas: HTMLCanvasElement;
@@ -23,6 +24,11 @@ function init() {
     keys.setUp();
 
     handleFrame();
+
+    const socket = io('http://localhost:3000');
+    socket.on('connect', () => {
+        console.log('Connected to server');
+    });
 }
 
 function handleFrame() {
