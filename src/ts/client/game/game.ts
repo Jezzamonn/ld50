@@ -39,7 +39,7 @@ export class Game {
     }
 
     render(context: CanvasRenderingContext2D) {
-        context.fillStyle = rgb(0, 0, 0);
+        context.fillStyle = '#7dcc6c'
         context.fillRect(0, 0, context.canvas.width, context.canvas.height);
 
         for (const ent of this.entities) {

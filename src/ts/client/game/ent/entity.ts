@@ -13,7 +13,7 @@ export class Entity {
     width = 10;
     height = 10;
 
-    debugColor = '#00ff00';
+    debugColor = '#fef';
 
     constructor(game: Game) {
         this.game = game;
