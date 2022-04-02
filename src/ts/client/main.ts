@@ -1,9 +1,9 @@
 import { Aseprite } from "../common/aseprite-js";
 import { KeyboardKeys, RegularKeys } from "../common/keys";
 import { seededRandom } from "../common/util";
-import { Game } from "./game/game";
+import { ClientGame } from "./game/client-game";
 
-let game: Game;
+let game: ClientGame;
 let canvas: HTMLCanvasElement;
 let context: CanvasRenderingContext2D;
 let simulatedTimeMs: number;
@@ -17,9 +17,9 @@ function init() {
     const keys = new KeyboardKeys();
     const rng = seededRandom("aaflafskjlasfdlasjwf");
 
-    Game.loadAllImages();
+    ClientGame.loadAllImages();
 
-    game = new Game(keys, rng);
+    game = new ClientGame(keys, rng);
     keys.setUp();
 
     handleFrame();

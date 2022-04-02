@@ -1,11 +1,11 @@
-import { Aseprite } from "../../../common/aseprite-js";
-import { pxFromPhys, spriteScale } from "../../../common/common";
-import { Game } from "../game";
+import { Aseprite } from "../../aseprite-js";
+import { pxFromPhys, spriteScale } from "../../common";
+import { EntityList } from "../entity-list";
 import { Entity } from "./entity";
 
 export class Decor extends Entity {
 
-    constructor(game: Game) {
+    constructor(game: EntityList) {
         super(game);
 
         this.width = 0;

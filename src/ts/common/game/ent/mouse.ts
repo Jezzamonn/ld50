@@ -1,7 +1,8 @@
-import { Aseprite } from "../../../common/aseprite-js";
-import { frameLength, physFromPx, Point, pxFromPhys, spriteScale } from "../../../common/common";
-import { clamp } from "../../../common/util";
-import { Game } from "../game";
+import { Aseprite } from "../../aseprite-js";
+import { frameLength, physFromPx, Point, pxFromPhys, spriteScale } from "../../common";
+import { RegularKeys } from "../../keys";
+import { clamp } from "../../util";
+import { EntityList } from "../entity-list";
 import { Cat } from "./cat";
 import { Entity } from "./entity";
 import { Holdable } from "./holdable";
@@ -33,7 +34,7 @@ export class Mouse extends Entity {
     isMoving = false;
     flipped = false;
 
-    constructor(game: Game) {
+    constructor(game: EntityList) {
         super(game);
 
         this.width = physFromPx(20);
@@ -54,7 +55,6 @@ export class Mouse extends Entity {
         }
 
         this.animCount += dt;
-        this.handleInput(dt);
         this.moveX(dt);
         this.moveY(dt)
 
@@ -98,13 +98,13 @@ export class Mouse extends Entity {
         return 'idle';
     }
 
-    handleInput(dt: number): void {
-        if (this.game.keys.anyWasPressedThisFrame(ACTION_KEYS)) {
+    handleInput(keys: RegularKeys, dt: number): void {
+        if (keys.anyWasPressedThisFrame(ACTION_KEYS)) {
             this.doAction();
         }
 
         if (this.rollCount <= 0) {
-            this.handleWalkingInput(dt);
+            this.handleWalkingInput(keys, dt);
         }
     }
 
@@ -121,19 +121,19 @@ export class Mouse extends Entity {
         }
     }
 
-    handleWalkingInput(dt: number) {
+    handleWalkingInput(keys: RegularKeys, dt: number) {
         let xInput = 0;
         let yInput = 0;
-        if (this.game.keys.anyIsPressed(LEFT_KEYS)) {
+        if (keys.anyIsPressed(LEFT_KEYS)) {
             xInput--;
         }
-        if (this.game.keys.anyIsPressed(RIGHT_KEYS)) {
+        if (keys.anyIsPressed(RIGHT_KEYS)) {
             xInput++;
         }
-        if (this.game.keys.anyIsPressed(UP_KEYS)) {
+        if (keys.anyIsPressed(UP_KEYS)) {
             yInput--;
         }
-        if (this.game.keys.anyIsPressed(DOWN_KEYS)) {
+        if (keys.anyIsPressed(DOWN_KEYS)) {
             yInput++;
         }
         if (xInput != 0 || yInput != 0) {
@@ -169,8 +169,10 @@ export class Mouse extends Entity {
     }
 
     tryPickup(): boolean {
-        const holdable = this.game.getEntitiesOfType(Holdable);
-        for (const ent of holdable) {
+        for (const ent of this.game.entities) {
+            if (!(ent instanceof Holdable)) {
+                continue;
+            }
             if (ent.done) {
                 continue;
             }

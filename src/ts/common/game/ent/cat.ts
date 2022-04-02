@@ -1,6 +1,6 @@
-import { Aseprite } from "../../../common/aseprite-js";
-import { frameLength, physFromPx, physScale, pxFromPhys, spriteScale } from "../../../common/common";
-import { Game } from "../game";
+import { Aseprite } from "../../aseprite-js";
+import { frameLength, physFromPx, physScale, pxFromPhys, spriteScale } from "../../common";
+import { EntityList } from "../entity-list";
 import { Entity } from "./entity";
 import { Holdable } from "./holdable";
 import { Mouse } from "./mouse";
@@ -10,7 +10,7 @@ export class Cat extends Entity {
     moveSpeed = physFromPx(0.3 / frameLength);
     distractionCount = 0;
 
-    constructor(game: Game) {
+    constructor(game: EntityList) {
         super(game);
 
         this.width = physFromPx(120);

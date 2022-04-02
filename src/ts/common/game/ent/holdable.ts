@@ -1,22 +1,22 @@
-import { Aseprite } from "../../../common/aseprite-js";
-import { frameLength, physFromPx, pxFromPhys, spriteScale } from "../../../common/common";
-import { choose } from "../../../common/util";
-import { Game } from "../game";
+import { Aseprite } from "../../aseprite-js";
+import { frameLength, physFromPx, pxFromPhys, spriteScale } from "../../common";
+import { choose } from "../../util";
+import { EntityList } from "../entity-list";
 import { Cat } from "./cat";
 import { Entity } from "./entity";
 import { Tree } from "./tree";
 
-const types = ['grass', 'rock', 'wood', 'wool']
+export const holdableTypes = ['grass', 'rock', 'wood', 'wool']
 
 export class Holdable extends Entity {
 
     type: string;
 
-    constructor(game: Game) {
+    constructor(game: EntityList) {
         super(game);
 
         this.debugColor = '#3e8948'
-        this.type = choose(types, game.rng);
+        this.type = 'grass';
 
         this.dampAcceleration = physFromPx(50 / frameLength);
     }

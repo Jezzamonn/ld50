@@ -1,11 +1,11 @@
-import { frameLength, physFromPx, Point, pxFromPhys } from "../../../common/common";
-import { Game } from "../game";
+import { frameLength, physFromPx, Point, pxFromPhys } from "../../common";
+import { EntityList } from "../entity-list";
 
 const pushSpeed = physFromPx(1 / frameLength);
 
 export class Entity {
 
-    game: Game;
+    game: EntityList;
     done: boolean = false;
 
     x: number = 0;
@@ -23,7 +23,7 @@ export class Entity {
 
     debugColor? = '#fef';
 
-    constructor(game: Game) {
+    constructor(game: EntityList) {
         this.game = game;
     }
 

@@ -1,24 +1,33 @@
 import { physFromPx, physScale, pxFromPhys, pxGameHeight, pxGameWidth } from "../../common/common";
 import { RegularKeys } from "../../common/keys";
-import { rgb } from "../../common/util";
-import { Cat } from "./ent/cat";
-import { Decor } from "./ent/decor";
-import { Entity } from "./ent/entity";
-import { Holdable } from "./ent/holdable";
-import { Mouse } from "./ent/mouse";
-import { Tree } from "./ent/tree";
+import { choose, rgb } from "../../common/util";
+import { Cat } from "../../common/game/ent/cat";
+import { Decor } from "../../common/game/ent/decor";
+import { Entity } from "../../common/game/ent/entity";
+import { Holdable, holdableTypes } from "../../common/game/ent/holdable";
+import { Mouse } from "../../common/game/ent/mouse";
+import { Tree } from "../../common/game/ent/tree";
 
-export class Game {
+const restartKeys = ["KeyR"];
+
+export class ClientGame {
 
     keys: RegularKeys;
     rng: () => number;
 
     entities: Entity[] = [];
-    player: Mouse;
+    player!: Mouse;
 
     constructor(keys: RegularKeys, rng: () => number) {
         this.keys = keys;
         this.rng = rng;
+
+        this.createWorld();
+    }
+
+    // TODO: Move this to the server
+    createWorld() {
+        this.entities = [];
 
         // Create the player and the cat
         const mouse = new Mouse(this);
@@ -35,6 +44,7 @@ export class Game {
         // Add a bunch of holdable things.
         for (let i = 0; i < 10; i++) {
             const holdable = new Holdable(this);
+            holdable.type = choose(holdableTypes, this.rng);
             holdable.midX = physFromPx(Math.round(this.rng() * pxGameWidth));
             holdable.minY = physFromPx(Math.round(this.rng() * pxGameHeight));
             this.entities.push(holdable);
@@ -58,6 +68,8 @@ export class Game {
     }
 
     update(dt: number) {
+        this.handlePlayerInput(dt);
+
         for (const ent of this.entities) {
             ent.update(dt);
         }
@@ -70,6 +82,13 @@ export class Game {
         }
 
         this.keys.resetFrame();
+    }
+
+    handlePlayerInput(dt: number) {
+        if (this.keys.anyWasPressedThisFrame(restartKeys)) {
+            this.createWorld();
+        }
+        this.player.handleInput(this.keys, dt);
     }
 
     render(context: CanvasRenderingContext2D) {
@@ -95,10 +114,6 @@ export class Game {
         context.fillStyle = '#7dcc6c'
         context.fillRect(0, 0, context.canvas.width, context.canvas.height);
         context.restore();
-    }
-
-    getEntitiesOfType<T extends Entity>(type: { new (...args: any[]): T }): T[] {
-        return this.entities.filter(ent => ent instanceof type) as T[];
     }
 
     static loadAllImages() {
