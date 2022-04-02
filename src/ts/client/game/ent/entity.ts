@@ -16,6 +16,13 @@ export class Entity {
     width = 10;
     height = 10;
 
+    get canCollide() {
+        return false;
+    }
+    get othersCanCollide() {
+        return true;
+    }
+
     dampAcceleration = 10 / frameLength;
 
     debugColor = '#fef';
@@ -34,10 +41,42 @@ export class Entity {
 
     moveX(dt: number): void {
         this.x += this.dx * dt;
+
+        if (!this.canCollide) {
+            return;
+        }
+        for (const ent of this.game.entities) {
+            if (ent !== this && ent.othersCanCollide) {
+                if (this.isTouching(ent)) {
+                    if (this.dx > 0) {
+                        this.maxX = ent.minX - 1;
+                    }
+                    else {
+                        this.minX = ent.maxX + 1;
+                    }
+                }
+            }
+        }
     }
 
     moveY(dt: number): void {
         this.y += this.dy * dt;
+
+        if (!this.canCollide) {
+            return;
+        }
+        for (const ent of this.game.entities) {
+            if (ent !== this && ent.othersCanCollide) {
+                if (this.isTouching(ent)) {
+                    if (this.dy > 0) {
+                        this.maxY = ent.minY - 1;
+                    }
+                    else {
+                        this.minY = ent.maxY + 1;
+                    }
+                }
+            }
+        }
     }
 
     moveZ(dt: number): void {

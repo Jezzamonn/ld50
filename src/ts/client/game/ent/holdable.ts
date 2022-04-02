@@ -1,3 +1,4 @@
+import { frameLength } from "../../../common/common";
 import { Game } from "../game";
 import { Entity } from "./entity";
 
@@ -6,5 +7,9 @@ export class Holdable extends Entity {
         super(game);
 
         this.debugColor = '#3e8948'
+    }
+
+    get othersCanCollide(): boolean {
+        return this.z === 0 && this.dz < (0.1 / frameLength);
     }
 }

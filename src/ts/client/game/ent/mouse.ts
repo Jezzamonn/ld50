@@ -35,6 +35,15 @@ export class Mouse extends Entity {
         this.dampAcceleration = 20 / frameLength;
     }
 
+    get othersCanCollide(): boolean {
+        return false;
+    }
+
+    get canCollide(): boolean {
+        // Ha, the bot suggested that we don't collide when rolling.
+        return true;
+    }
+
     update(dt: number): void {
         // TODO: I suppose this could load things from the server??
         if (this.rollCount > 0) {
@@ -132,7 +141,7 @@ export class Mouse extends Entity {
             if (ent.done) {
                 continue;
             }
-            if (this.isTouching(ent)) {
+            if (this.isTouching(ent, this.width / 2)) {
                 this.holding = ent;
                 // The game will remove this entity
                 ent.done = true;
