@@ -1,4 +1,4 @@
-import { Point } from "../../../common/common";
+import { frameLength, Point } from "../../../common/common";
 import { Game } from "../game";
 
 export class Entity {
@@ -13,13 +13,20 @@ export class Entity {
     width = 10;
     height = 10;
 
+    dampAmount = 7;
+
     debugColor = '#fef';
 
     constructor(game: Game) {
         this.game = game;
     }
 
-    update(dt: number): void {}
+    update(dt: number): void {
+        this.dampX(dt);
+        this.dampY(dt);
+        this.moveX(dt);
+        this.moveY(dt);
+    }
 
     moveX(dt: number): void {
         this.x += this.dx * dt;
@@ -27,6 +34,14 @@ export class Entity {
 
     moveY(dt: number): void {
         this.y += this.dy * dt;
+    }
+
+    dampX(dt: number): void {
+        this.dx *= Math.exp(-this.dampAmount * dt);
+    }
+
+    dampY(dt: number): void {
+        this.dy *= Math.exp(-this.dampAmount * dt);
     }
 
     render(context: CanvasRenderingContext2D): void {

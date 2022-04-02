@@ -16,6 +16,10 @@ export class Mouse extends Entity {
     walkAcceleration = 50 / frameLength;
     walkDeacceleration = 20 / frameLength;
 
+    rollMultiple = 2;
+    rollCount = 0;
+    rollTime = 0.3;
+
     holding?: Entity;
 
     constructor(game: Game) {
@@ -23,10 +27,16 @@ export class Mouse extends Entity {
 
         this.width = 20;
         this.height = 20;
+
+        this.dampAmount = 20;
     }
 
     update(dt: number): void {
         // TODO: I suppose this could load things from the server??
+        if (this.rollCount > 0) {
+            this.rollCount -= dt;
+        }
+
         this.handleInput(dt);
         this.moveX(dt);
         this.moveY(dt)
@@ -38,11 +48,40 @@ export class Mouse extends Entity {
     }
 
     render(context: CanvasRenderingContext2D) {
+        if (this.rollCount > 0) {
+            this.debugColor = '#3e8948'
+        }
+        else {
+            this.debugColor = '#ff0000'
+        }
         super.render(context);
         this.holding?.render(context);
     }
 
     handleInput(dt: number): void {
+        if (this.game.keys.anyWasPressedThisFrame(ACTION_KEYS)) {
+            this.doAction();
+        }
+
+        if (this.rollCount <= 0) {
+            this.handleWalkingInput(dt);
+        }
+    }
+
+    doAction() {
+        if (this.holding) {
+            this.putDown();
+        }
+        else {
+            const pickedUp = this.tryPickup();
+            if (pickedUp) {
+                return;
+            }
+            this.roll();
+        }
+    }
+
+    handleWalkingInput(dt: number) {
         let xInput = 0;
         let yInput = 0;
         if (this.game.keys.anyIsPressed(LEFT_KEYS)) {
@@ -63,15 +102,7 @@ export class Mouse extends Entity {
             this.dx = clamp(this.dx, -this.maxWalkSpeed * dt, this.maxWalkSpeed * dt);
         }
         else {
-            if (this.dx > this.walkDeacceleration * dt) {
-                this.dx -= this.walkDeacceleration * dt;
-            }
-            else if (this.dx < -this.walkDeacceleration * dt) {
-                this.dx += this.walkDeacceleration * dt;
-            }
-            else {
-                this.dx = 0;
-            }
+            this.dampX(dt);
         }
 
         if (yInput != 0) {
@@ -79,28 +110,11 @@ export class Mouse extends Entity {
             this.dy = clamp(this.dy, -this.maxWalkSpeed * dt, this.maxWalkSpeed * dt);
         }
         else {
-            if (this.dy > this.walkDeacceleration * dt) {
-                this.dy -= this.walkDeacceleration * dt;
-            }
-            else if (this.dy < -this.walkDeacceleration * dt) {
-                this.dy += this.walkDeacceleration * dt;
-            }
-            else {
-                this.dy = 0;
-            }
-        }
-
-        if (this.game.keys.anyWasPressedThisFrame(ACTION_KEYS)) {
-            if (this.holding) {
-                this.putDown();
-            }
-            else {
-                this.tryPickup();
-            }
+            this.dampY(dt);
         }
     }
 
-    tryPickup() {
+    tryPickup(): boolean {
         const holdable = this.game.getEntitiesOfType(Holdable);
         for (const ent of holdable) {
             if (ent.done) {
@@ -108,10 +122,12 @@ export class Mouse extends Entity {
             }
             if (this.isTouching(ent)) {
                 this.holding = ent;
+                // The game will remove this entity
                 ent.done = true;
-                // The game should remove this entity
+                return true;
             }
         }
+        return false
     }
 
     putDown() {
@@ -119,8 +135,21 @@ export class Mouse extends Entity {
             return;
         }
         this.holding.done = false;
+        this.holding.dx = 2 * this.dx;
+        this.holding.dy = 2 * this.dy;
         this.game.entities.push(this.holding);
         this.holding = undefined;
+    }
+
+    roll() {
+        // TODO: Cooldown?
+        if (this.rollCount > 0) {
+            return;
+        }
+        this.rollCount = this.rollTime;
+        // IDK if this makes sense.
+        this.dx *= this.rollMultiple;
+        this.dy *= this.rollMultiple;
     }
 
 
