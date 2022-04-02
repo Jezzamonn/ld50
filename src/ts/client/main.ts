@@ -1,3 +1,4 @@
+import { KeyboardKeys, RegularKeys } from "../common/keys";
 import { Game } from "./game/game";
 
 let game: Game;
@@ -7,9 +8,12 @@ let simulatedTimeMs: number;
 const fixedTimeStep = 1 / 60;
 
 function init() {
-    game = new Game();
     canvas = document.querySelector("#canvas") as HTMLCanvasElement;
     context = canvas.getContext("2d")!;
+
+    const keys = new KeyboardKeys();
+    game = new Game(keys);
+    keys.setUp();
 
     handleFrame();
 }
