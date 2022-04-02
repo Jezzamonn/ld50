@@ -8,12 +8,15 @@ export class Entity {
 
     x: number = 0;
     y: number = 0;
+    z: number = 0;
     dx: number = 0;
     dy: number = 0;
+    dz: number = 0;
+    gravity: number = 10 / frameLength;
     width = 10;
     height = 10;
 
-    dampAmount = 7;
+    dampAcceleration = 10 / frameLength;
 
     debugColor = '#fef';
 
@@ -26,6 +29,7 @@ export class Entity {
         this.dampY(dt);
         this.moveX(dt);
         this.moveY(dt);
+        this.moveZ(dt);
     }
 
     moveX(dt: number): void {
@@ -36,18 +40,44 @@ export class Entity {
         this.y += this.dy * dt;
     }
 
+    moveZ(dt: number): void {
+        this.dz += this.gravity * dt;
+        this.z += this.dz * dt;
+        if (this.z > 0) {
+            this.z = 0;
+            // Bounce!
+            this.dz = -0.5 * this.dz;
+        }
+    }
+
     dampX(dt: number): void {
-        this.dx *= Math.exp(-this.dampAmount * dt);
+        if (this.dx > this.dampAcceleration * dt) {
+            this.dx -= this.dampAcceleration * dt;
+        }
+        else if (this.dx < -this.dampAcceleration * dt) {
+            this.dx += this.dampAcceleration * dt;
+        }
+        else {
+            this.dx = 0;
+        }
     }
 
     dampY(dt: number): void {
-        this.dy *= Math.exp(-this.dampAmount * dt);
+        if (this.dy > this.dampAcceleration * dt) {
+            this.dy -= this.dampAcceleration * dt;
+        }
+        else if (this.dy < -this.dampAcceleration * dt) {
+            this.dy += this.dampAcceleration * dt;
+        }
+        else {
+            this.dy = 0;
+        }
     }
 
     render(context: CanvasRenderingContext2D): void {
         if (this.debugColor) {
             context.fillStyle = this.debugColor;
-            context.fillRect(this.x, this.y, this.width, this.height);
+            context.fillRect(this.x, this.y + this.z, this.width, this.height);
         }
     }
 

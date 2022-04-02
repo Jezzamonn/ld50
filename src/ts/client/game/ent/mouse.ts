@@ -1,4 +1,4 @@
-import { frameLength } from "../../../common/common";
+import { frameLength, Point } from "../../../common/common";
 import { clamp } from "../../../common/util";
 import { Game } from "../game";
 import { Entity } from "./entity";
@@ -12,15 +12,19 @@ const ACTION_KEYS = ["Space"]
 
 export class Mouse extends Entity {
 
-    maxWalkSpeed = 200 / frameLength;
+    maxWalkSpeed = 3 / frameLength;
     walkAcceleration = 50 / frameLength;
-    walkDeacceleration = 20 / frameLength;
+    throwSpeed = 6 / frameLength;
 
-    rollMultiple = 2;
+    rollSpeed = 6 / frameLength;
     rollCount = 0;
     rollTime = 0.3;
 
     holding?: Entity;
+
+    lastDirection: Point = {
+        x: 1, y: 0,
+    }
 
     constructor(game: Game) {
         super(game);
@@ -28,7 +32,7 @@ export class Mouse extends Entity {
         this.width = 20;
         this.height = 20;
 
-        this.dampAmount = 20;
+        this.dampAcceleration = 20 / frameLength;
     }
 
     update(dt: number): void {
@@ -43,7 +47,8 @@ export class Mouse extends Entity {
 
         if (this.holding) {
             this.holding.midX = this.midX;
-            this.holding.maxY = this.minY;
+            this.holding.maxY = this.maxY;
+            this.holding.z = this.z - this.height;
         }
     }
 
@@ -96,10 +101,17 @@ export class Mouse extends Entity {
         if (this.game.keys.anyIsPressed(DOWN_KEYS)) {
             yInput++;
         }
+        if (xInput != 0 || yInput != 0) {
+            // This doesn't handle diagonal movement well.
+            this.lastDirection = {
+                x: xInput,
+                y: yInput,
+            }
+        }
 
         if (xInput != 0) {
             this.dx += xInput * this.walkAcceleration * dt;
-            this.dx = clamp(this.dx, -this.maxWalkSpeed * dt, this.maxWalkSpeed * dt);
+            this.dx = clamp(this.dx, -this.maxWalkSpeed, this.maxWalkSpeed);
         }
         else {
             this.dampX(dt);
@@ -107,7 +119,7 @@ export class Mouse extends Entity {
 
         if (yInput != 0) {
             this.dy += yInput * this.walkAcceleration * dt;
-            this.dy = clamp(this.dy, -this.maxWalkSpeed * dt, this.maxWalkSpeed * dt);
+            this.dy = clamp(this.dy, -this.maxWalkSpeed, this.maxWalkSpeed);
         }
         else {
             this.dampY(dt);
@@ -135,8 +147,8 @@ export class Mouse extends Entity {
             return;
         }
         this.holding.done = false;
-        this.holding.dx = 2 * this.dx;
-        this.holding.dy = 2 * this.dy;
+        this.holding.dx = this.throwSpeed * this.lastDirection.x;
+        this.holding.dy = this.throwSpeed * this.lastDirection.y;
         this.game.entities.push(this.holding);
         this.holding = undefined;
     }
@@ -147,9 +159,8 @@ export class Mouse extends Entity {
             return;
         }
         this.rollCount = this.rollTime;
-        // IDK if this makes sense.
-        this.dx *= this.rollMultiple;
-        this.dy *= this.rollMultiple;
+        this.dx = this.rollSpeed * this.lastDirection.x;
+        this.dy = this.rollSpeed * this.lastDirection.y;
     }
 
 
