@@ -64,4 +64,8 @@ export class Game {
     getEntitiesOfType<T extends Entity>(type: { new (...args: any[]): T }): T[] {
         return this.entities.filter(ent => ent instanceof type) as T[];
     }
+
+    static loadAllImages() {
+        Mouse.loadImage();
+    }
 }

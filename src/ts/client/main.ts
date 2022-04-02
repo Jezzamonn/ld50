@@ -1,3 +1,4 @@
+import { Aseprite } from "../common/aseprite-js";
 import { KeyboardKeys, RegularKeys } from "../common/keys";
 import { seededRandom } from "../common/util";
 import { Game } from "./game/game";
@@ -11,9 +12,12 @@ const fixedTimeStep = 1 / 60;
 function init() {
     canvas = document.querySelector("#canvas") as HTMLCanvasElement;
     context = canvas.getContext("2d")!;
+    Aseprite.disableSmoothing(context);
 
     const keys = new KeyboardKeys();
     const rng = seededRandom("aaflafskjlasfdlasjwf");
+
+    Game.loadAllImages();
 
     game = new Game(keys, rng);
     keys.setUp();

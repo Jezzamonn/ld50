@@ -1,4 +1,5 @@
-import { frameLength, physFromPx, Point } from "../../../common/common";
+import { Aseprite } from "../../../common/aseprite-js";
+import { frameLength, physFromPx, Point, pxFromPhys } from "../../../common/common";
 import { clamp } from "../../../common/util";
 import { Game } from "../game";
 import { Cat } from "./cat";
@@ -9,7 +10,7 @@ const UP_KEYS = ["KeyW", "ArrowUp"];
 const DOWN_KEYS = ["KeyS", "ArrowDown"];
 const LEFT_KEYS = ["KeyA", "ArrowLeft"];
 const RIGHT_KEYS = ["KeyD", "ArrowRight"];
-const ACTION_KEYS = ["Space"]
+const ACTION_KEYS = ["Space"];
 
 export class Mouse extends Entity {
 
@@ -46,6 +47,7 @@ export class Mouse extends Entity {
             this.rollCount -= dt;
         }
 
+        this.animCount += dt;
         this.handleInput(dt);
         this.moveX(dt);
         this.moveY(dt)
@@ -65,6 +67,23 @@ export class Mouse extends Entity {
             this.debugColor = '#ff0000'
         }
         super.render(context);
+
+        Aseprite.drawAnimation({
+            context,
+            image: 'mouse',
+            animationName: 'run',
+            time: this.animCount,
+            position: {
+                x: pxFromPhys(this.midX),
+                y: pxFromPhys(this.maxY),
+            },
+            anchorRatios: {
+                x: 0.5,
+                y: 1,
+            },
+            scale: 2
+        });
+
         this.holding?.render(context);
     }
 
@@ -166,6 +185,10 @@ export class Mouse extends Entity {
         this.rollCount = this.rollTime;
         this.dx = this.rollSpeed * this.lastDirection.x;
         this.dy = this.rollSpeed * this.lastDirection.y;
+    }
+
+    static loadImage() {
+        Aseprite.loadImage({name: 'mouse', basePath: 'sprites/'});
     }
 
 

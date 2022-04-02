@@ -17,6 +17,7 @@ export class Entity {
     gravity: number = physFromPx(10 / frameLength);
     width = physFromPx(10);
     height = physFromPx(10);
+    animCount = 0;
 
     dampAcceleration = physFromPx(10 / frameLength);
 
@@ -27,6 +28,8 @@ export class Entity {
     }
 
     update(dt: number): void {
+        this.animCount += dt;
+
         this.dampX(dt);
         this.dampY(dt);
         this.moveX(dt);

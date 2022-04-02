@@ -536,3 +536,14 @@ export function disableSmoothing(context: CanvasRenderingContext2D) {
     (context as any).msImageSmoothingEnabled = false;
     (context as any).webkitImageSmoothingEnabled = false;
 }
+
+export const Aseprite = {
+    loadImage,
+    loadImages,
+    drawSprite,
+    drawAnimation,
+    disableSmoothing,
+    get images() {
+        return images;
+    },
+}
