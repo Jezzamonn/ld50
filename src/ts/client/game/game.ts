@@ -30,8 +30,8 @@ export class Game {
         // Add a bunch of holdable things.
         for (let i = 0; i < 10; i++) {
             const holdable = new Holdable(this);
-            holdable.midX = this.rng() * 800;
-            holdable.minY = this.rng() * 600;
+            holdable.midX = Math.round(this.rng() * 800);
+            holdable.minY = Math.round(this.rng() * 600);
             this.entities.push(holdable);
         }
     }

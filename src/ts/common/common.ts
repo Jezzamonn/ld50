@@ -4,3 +4,5 @@ export interface Point {
 }
 
 export const frameLength = 1 / 60;
+
+export const physScale = 64;

@@ -16,13 +16,6 @@ export class Entity {
     width = 10;
     height = 10;
 
-    get canCollide() {
-        return false;
-    }
-    get othersCanCollide() {
-        return true;
-    }
-
     dampAcceleration = 10 / frameLength;
 
     debugColor = '#fef';
@@ -40,19 +33,36 @@ export class Entity {
     }
 
     moveX(dt: number): void {
-        this.x += this.dx * dt;
-
-        if (!this.canCollide) {
-            return;
-        }
+        let pushDir = 0;
+        const touchingAtStart = new Set();
         for (const ent of this.game.entities) {
-            if (ent !== this && ent.othersCanCollide) {
+            if (ent !== this && this.canCollideWith(ent)) {
                 if (this.isTouching(ent)) {
-                    if (this.dx > 0) {
-                        this.maxX = ent.minX - 1;
+                    touchingAtStart.add(ent);
+
+                    if (this.midX < ent.midX) {
+                        pushDir--;
                     }
                     else {
-                        this.minX = ent.maxX + 1;
+                        pushDir++;
+                    }
+                }
+            }
+        }
+
+        const pushSpeed = 1 / frameLength;
+
+        this.x += (this.dx + pushSpeed * pushDir) * dt;
+        this.x = Math.round(this.x);
+
+        for (const ent of this.game.entities) {
+            if (ent !== this && this.canCollideWith(ent) && !touchingAtStart.has(ent)) {
+                if (this.isTouching(ent)) {
+                    if (this.dx > 0) {
+                        this.maxX = ent.minX;
+                    }
+                    else if (this.dx < 0) {
+                        this.minX = ent.maxX;
                     }
                 }
             }
@@ -60,19 +70,36 @@ export class Entity {
     }
 
     moveY(dt: number): void {
-        this.y += this.dy * dt;
-
-        if (!this.canCollide) {
-            return;
-        }
+        let pushDir = 0;
+        const touchingAtStart = new Set();
         for (const ent of this.game.entities) {
-            if (ent !== this && ent.othersCanCollide) {
+            if (ent !== this && this.canCollideWith(ent)) {
                 if (this.isTouching(ent)) {
-                    if (this.dy > 0) {
-                        this.maxY = ent.minY - 1;
+                    touchingAtStart.add(ent);
+
+                    if (this.midY < ent.midY) {
+                        pushDir--;
                     }
                     else {
-                        this.minY = ent.maxY + 1;
+                        pushDir++;
+                    }
+                }
+            }
+        }
+
+        const pushSpeed = 1 / frameLength;
+
+        this.y += (this.dy + pushSpeed * pushDir) * dt;
+        this.y = Math.round(this.y);
+
+        for (const ent of this.game.entities) {
+            if (ent !== this && this.canCollideWith(ent)) {
+                if (this.isTouching(ent)) {
+                    if (this.dy > 0) {
+                        this.maxY = ent.minY;
+                    }
+                    else if (this.dy < 0) {
+                        this.minY = ent.maxY;
                     }
                 }
             }
@@ -136,6 +163,14 @@ export class Entity {
             this.y + this.height + margin > point.y &&
             this.y - margin < point.y
         );
+    }
+
+    canCollideWith(other: Entity): boolean {
+        return false;
+    }
+
+    isOnGround(): boolean {
+        return this.z === 0 && this.dz < (0.1 / frameLength);
     }
 
     get minX(): number {

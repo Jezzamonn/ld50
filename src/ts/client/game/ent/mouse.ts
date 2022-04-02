@@ -1,6 +1,7 @@
 import { frameLength, Point } from "../../../common/common";
 import { clamp } from "../../../common/util";
 import { Game } from "../game";
+import { Cat } from "./cat";
 import { Entity } from "./entity";
 import { Holdable } from "./holdable";
 
@@ -35,13 +36,8 @@ export class Mouse extends Entity {
         this.dampAcceleration = 20 / frameLength;
     }
 
-    get othersCanCollide(): boolean {
-        return false;
-    }
-
-    get canCollide(): boolean {
-        // Ha, the bot suggested that we don't collide when rolling.
-        return true;
+    canCollideWith(other: Entity): boolean {
+        return other instanceof Cat || (other instanceof Holdable && other.isOnGround());
     }
 
     update(dt: number): void {
