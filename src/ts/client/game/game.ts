@@ -2,9 +2,11 @@ import { physFromPx, physScale, pxFromPhys, pxGameHeight, pxGameWidth } from "..
 import { RegularKeys } from "../../common/keys";
 import { rgb } from "../../common/util";
 import { Cat } from "./ent/cat";
+import { Decor } from "./ent/decor";
 import { Entity } from "./ent/entity";
 import { Holdable } from "./ent/holdable";
 import { Mouse } from "./ent/mouse";
+import { Tree } from "./ent/tree";
 
 export class Game {
 
@@ -20,8 +22,8 @@ export class Game {
 
         // Create the player and the cat
         const mouse = new Mouse(this);
-        mouse.midX = 0;//physFromPx(200);
-        mouse.minY = 0;//physFromPx(200);
+        mouse.midX = physFromPx(pxGameWidth / 2);
+        mouse.minY = physFromPx(pxGameHeight / 2);
         this.entities.push(mouse);
         this.player = mouse;
 
@@ -33,9 +35,25 @@ export class Game {
         // Add a bunch of holdable things.
         for (let i = 0; i < 10; i++) {
             const holdable = new Holdable(this);
-            holdable.midX = physFromPx(Math.round(this.rng() * 800));
-            holdable.minY = physFromPx(Math.round(this.rng() * 600));
+            holdable.midX = physFromPx(Math.round(this.rng() * pxGameWidth));
+            holdable.minY = physFromPx(Math.round(this.rng() * pxGameHeight));
             this.entities.push(holdable);
+        }
+
+        // Add a bunch of trees
+        for (let i = 0; i < 20; i++) {
+            const tree = new Tree(this);
+            tree.midX = physFromPx(Math.round(this.rng() * pxGameWidth));
+            tree.maxY = physFromPx(Math.round(this.rng() * pxGameHeight));
+            this.entities.push(tree);
+        }
+
+        // Add decor
+        for (let i = 0; i < 50; i++) {
+            const decor = new Decor(this);
+            decor.midX = physFromPx(Math.round(this.rng() * pxGameWidth));
+            decor.maxY = physFromPx(Math.round(this.rng() * pxGameHeight));
+            this.entities.push(decor);
         }
     }
 
@@ -62,6 +80,10 @@ export class Game {
         context.translate(
             pxFromPhys(-this.player.midX) + pxGameWidth / 2,
             pxFromPhys(-this.player.midY) + pxGameHeight / 2);
+
+        // Sort the entities by y position
+        this.entities.sort((a, b) => a.maxY - b.maxY);
+
         for (const ent of this.entities) {
             ent.render(context);
         }
@@ -81,5 +103,9 @@ export class Game {
 
     static loadAllImages() {
         Mouse.loadImage();
+        Cat.loadImage();
+        Holdable.loadImage();
+        Tree.loadImage();
+        Decor.loadImage();
     }
 }

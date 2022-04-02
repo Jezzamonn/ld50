@@ -153,6 +153,9 @@ export class Entity {
     }
 
     isTouching(other: Entity, margin: number = 0): boolean {
+        if (this.width === 0 || this.height === 0 || other.width === 0 || other.height === 0) {
+            return false;
+        }
         return (
             this.x + this.width + margin > other.x &&
             this.x - margin < other.x + other.width &&
@@ -162,6 +165,9 @@ export class Entity {
     }
 
     isTouchingPoint(point: Point, margin: number = 0): boolean {
+        if (this.width === 0 || this.height === 0) {
+            return false;
+        }
         return (
             this.x + this.width + margin > point.x &&
             this.x - margin < point.x &&

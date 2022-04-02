@@ -1,0 +1,22 @@
+{ "frames": [
+   {
+    "filename": "tree.aseprite",
+    "frame": { "x": 1, "y": 1, "w": 15, "h": 27 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 15, "h": 27 },
+    "sourceSize": { "w": 15, "h": 27 },
+    "duration": 100
+   }
+ ],
+ "meta": {
+  "app": "https://www.aseprite.org/",
+  "version": "1.2.33-x64",
+  "image": "tree.png",
+  "format": "RGBA8888",
+  "size": { "w": 17, "h": 66 },
+  "scale": "1",
+  "frameTags": [
+  ]
+ }
+}

@@ -1,10 +1,11 @@
 import { Aseprite } from "../../../common/aseprite-js";
-import { frameLength, physFromPx, Point, pxFromPhys } from "../../../common/common";
+import { frameLength, physFromPx, Point, pxFromPhys, spriteScale } from "../../../common/common";
 import { clamp } from "../../../common/util";
 import { Game } from "../game";
 import { Cat } from "./cat";
 import { Entity } from "./entity";
 import { Holdable } from "./holdable";
+import { Tree } from "./tree";
 
 const UP_KEYS = ["KeyW", "ArrowUp"];
 const DOWN_KEYS = ["KeyS", "ArrowDown"];
@@ -19,9 +20,9 @@ export class Mouse extends Entity {
     throwSpeed = physFromPx(4 / frameLength);
     throwZSpeed = physFromPx(2 / frameLength);
 
-    rollSpeed = physFromPx(6 / frameLength);
+    rollSpeed = physFromPx(8 / frameLength);
     rollCount = 0;
-    rollTime = 0.3;
+    rollTime = 0.2;
 
     zHeight = physFromPx(30);
 
@@ -43,7 +44,7 @@ export class Mouse extends Entity {
     }
 
     canCollideWith(other: Entity): boolean {
-        return other instanceof Cat || (other instanceof Holdable && other.isOnGround());
+        return other instanceof Cat || (other instanceof Holdable && other.isOnGround()) || other instanceof Tree;
     }
 
     update(dt: number): void {
@@ -80,7 +81,7 @@ export class Mouse extends Entity {
                 x: 0.5,
                 y: 1,
             },
-            scale: 2,
+            scale: spriteScale,
             flippedX: this.flipped,
         });
 
@@ -188,8 +189,8 @@ export class Mouse extends Entity {
             return;
         }
         this.holding.done = false;
-        this.holding.dx = this.throwSpeed * this.facingDirection.x;
-        this.holding.dy = this.throwSpeed * this.facingDirection.y;
+        this.holding.dx = this.throwSpeed * this.facingDirection.x + 0.5 * this.dx;
+        this.holding.dy = this.throwSpeed * this.facingDirection.y + 0.5 * this.dy;
         this.holding.dz = -this.throwZSpeed;
         this.game.entities.push(this.holding);
         this.holding = undefined;
