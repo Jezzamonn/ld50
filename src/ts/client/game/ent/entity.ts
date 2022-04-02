@@ -21,7 +21,7 @@ export class Entity {
 
     dampAcceleration = physFromPx(10 / frameLength);
 
-    debugColor = '#fef';
+    debugColor? = '#fef';
 
     constructor(game: Game) {
         this.game = game;
@@ -113,7 +113,7 @@ export class Entity {
         if (this.z > 0) {
             this.z = 0;
             // Bounce!
-            this.dz = -0.5 * this.dz;
+            this.dz = -0.2 * this.dz;
         }
     }
 

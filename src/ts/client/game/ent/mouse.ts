@@ -16,23 +16,28 @@ export class Mouse extends Entity {
 
     maxWalkSpeed = physFromPx(3 / frameLength);
     walkAcceleration = physFromPx(50 / frameLength);
-    throwSpeed = physFromPx(6 / frameLength);
+    throwSpeed = physFromPx(4 / frameLength);
+    throwZSpeed = physFromPx(2 / frameLength);
 
     rollSpeed = physFromPx(6 / frameLength);
     rollCount = 0;
     rollTime = 0.3;
 
+    zHeight = physFromPx(30);
+
     holding?: Entity;
 
-    lastDirection: Point = {
-        x: 1, y: 0,
-    }
+    facingDirection: Point = { x: 1, y: 0 };
+
+    isMoving = false;
+    flipped = false;
 
     constructor(game: Game) {
         super(game);
 
         this.width = physFromPx(20);
-        this.height = physFromPx(20);
+        this.height = physFromPx(10);
+        this.debugColor = undefined;
 
         this.dampAcceleration = physFromPx(20 / frameLength);
     }
@@ -55,23 +60,17 @@ export class Mouse extends Entity {
         if (this.holding) {
             this.holding.midX = this.midX;
             this.holding.maxY = this.maxY;
-            this.holding.z = this.z - this.height;
+            this.holding.z = this.z - this.zHeight;
         }
     }
 
     render(context: CanvasRenderingContext2D) {
-        if (this.rollCount > 0) {
-            this.debugColor = '#3e8948'
-        }
-        else {
-            this.debugColor = '#ff0000'
-        }
         super.render(context);
 
         Aseprite.drawAnimation({
             context,
             image: 'mouse',
-            animationName: 'run',
+            animationName: this.getAnimationName(),
             time: this.animCount,
             position: {
                 x: pxFromPhys(this.midX),
@@ -81,10 +80,21 @@ export class Mouse extends Entity {
                 x: 0.5,
                 y: 1,
             },
-            scale: 2
+            scale: 2,
+            flippedX: this.flipped,
         });
 
         this.holding?.render(context);
+    }
+
+    getAnimationName() {
+        if (this.rollCount > 0) {
+            return 'dash';
+        }
+        if (this.isMoving) {
+            return 'run';
+        }
+        return 'idle';
     }
 
     handleInput(dt: number): void {
@@ -127,15 +137,20 @@ export class Mouse extends Entity {
         }
         if (xInput != 0 || yInput != 0) {
             // This doesn't handle diagonal movement well.
-            this.lastDirection = {
+            this.facingDirection = {
                 x: xInput,
                 y: yInput,
             }
         }
 
+        this.isMoving = false;
+
         if (xInput != 0) {
             this.dx += xInput * this.walkAcceleration * dt;
             this.dx = clamp(this.dx, -this.maxWalkSpeed, this.maxWalkSpeed);
+
+            this.flipped = xInput < 0;
+            this.isMoving = true;
         }
         else {
             this.dampX(dt);
@@ -144,6 +159,8 @@ export class Mouse extends Entity {
         if (yInput != 0) {
             this.dy += yInput * this.walkAcceleration * dt;
             this.dy = clamp(this.dy, -this.maxWalkSpeed, this.maxWalkSpeed);
+
+            this.isMoving = true;
         }
         else {
             this.dampY(dt);
@@ -171,8 +188,9 @@ export class Mouse extends Entity {
             return;
         }
         this.holding.done = false;
-        this.holding.dx = this.throwSpeed * this.lastDirection.x;
-        this.holding.dy = this.throwSpeed * this.lastDirection.y;
+        this.holding.dx = this.throwSpeed * this.facingDirection.x;
+        this.holding.dy = this.throwSpeed * this.facingDirection.y;
+        this.holding.dz = -this.throwZSpeed;
         this.game.entities.push(this.holding);
         this.holding = undefined;
     }
@@ -183,8 +201,8 @@ export class Mouse extends Entity {
             return;
         }
         this.rollCount = this.rollTime;
-        this.dx = this.rollSpeed * this.lastDirection.x;
-        this.dy = this.rollSpeed * this.lastDirection.y;
+        this.dx = this.rollSpeed * this.facingDirection.x;
+        this.dy = this.rollSpeed * this.facingDirection.y;
     }
 
     static loadImage() {
