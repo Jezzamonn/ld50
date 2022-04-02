@@ -1,4 +1,4 @@
-import { physFromPx, physScale } from "../../common/common";
+import { physFromPx, physScale, pxFromPhys, pxGameHeight, pxGameWidth } from "../../common/common";
 import { RegularKeys } from "../../common/keys";
 import { rgb } from "../../common/util";
 import { Cat } from "./ent/cat";
@@ -12,6 +12,7 @@ export class Game {
     rng: () => number;
 
     entities: Entity[] = [];
+    player: Mouse;
 
     constructor(keys: RegularKeys, rng: () => number) {
         this.keys = keys;
@@ -19,9 +20,10 @@ export class Game {
 
         // Create the player and the cat
         const mouse = new Mouse(this);
-        mouse.midX = physFromPx(200);
-        mouse.minY = physFromPx(200);
+        mouse.midX = 0;//physFromPx(200);
+        mouse.minY = 0;//physFromPx(200);
         this.entities.push(mouse);
+        this.player = mouse;
 
         const cat = new Cat(this);
         cat.midX = physFromPx(200);
@@ -53,12 +55,24 @@ export class Game {
     }
 
     render(context: CanvasRenderingContext2D) {
-        context.fillStyle = '#7dcc6c'
-        context.fillRect(0, 0, context.canvas.width, context.canvas.height);
+        context.resetTransform();
 
+        this.renderBg(context);
+
+        context.translate(
+            pxFromPhys(-this.player.midX) + pxGameWidth / 2,
+            pxFromPhys(-this.player.midY) + pxGameHeight / 2);
         for (const ent of this.entities) {
             ent.render(context);
         }
+    }
+
+    renderBg(context: CanvasRenderingContext2D) {
+        context.save();
+        context.resetTransform();
+        context.fillStyle = '#7dcc6c'
+        context.fillRect(0, 0, context.canvas.width, context.canvas.height);
+        context.restore();
     }
 
     getEntitiesOfType<T extends Entity>(type: { new (...args: any[]): T }): T[] {
