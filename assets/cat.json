@@ -1,7 +1,16 @@
 { "frames": [
    {
-    "filename": "cat.aseprite",
+    "filename": "cat 0.aseprite",
     "frame": { "x": 1, "y": 1, "w": 100, "h": 150 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 100, "h": 150 },
+    "sourceSize": { "w": 100, "h": 150 },
+    "duration": 100
+   },
+   {
+    "filename": "cat 1.aseprite",
+    "frame": { "x": 101, "y": 1, "w": 100, "h": 150 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 100, "h": 150 },
@@ -14,10 +23,11 @@
   "version": "1.2.33-x64",
   "image": "cat.png",
   "format": "RGBA8888",
-  "size": { "w": 102, "h": 152 },
+  "size": { "w": 202, "h": 152 },
   "scale": "1",
   "frameTags": [
-   { "name": "idle", "from": 0, "to": 0, "direction": "forward" }
+   { "name": "idle", "from": 0, "to": 0, "direction": "forward" },
+   { "name": "distracted", "from": 1, "to": 1, "direction": "forward" }
   ]
  }
 }

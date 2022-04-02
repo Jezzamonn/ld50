@@ -58,6 +58,7 @@ export class Entity {
         this.x += (this.dx + pushSpeed * pushDir) * dt;
         this.x = Math.round(this.x);
 
+        let lastTouched: Entity | null = null;
         for (const ent of this.game.entities) {
             if (ent !== this && this.canCollideWith(ent) && !touchingAtStart.has(ent)) {
                 if (this.isTouching(ent)) {
@@ -68,7 +69,11 @@ export class Entity {
                         this.minX = ent.maxX;
                     }
                 }
+                lastTouched = ent;
             }
+        }
+        if (lastTouched) {
+            this.onEntityCollision(lastTouched);
         }
     }
 
@@ -93,8 +98,9 @@ export class Entity {
         this.y += (this.dy + pushSpeed * pushDir) * dt;
         this.y = Math.round(this.y);
 
+        let lastTouched: Entity | null = null;
         for (const ent of this.game.entities) {
-            if (ent !== this && this.canCollideWith(ent)) {
+            if (ent !== this && this.canCollideWith(ent) && !touchingAtStart.has(ent)) {
                 if (this.isTouching(ent)) {
                     if (this.dy > 0) {
                         this.maxY = ent.minY;
@@ -102,8 +108,12 @@ export class Entity {
                     else if (this.dy < 0) {
                         this.minY = ent.maxY;
                     }
+                    lastTouched = ent;
                 }
             }
+        }
+        if (lastTouched) {
+            this.onEntityCollision(lastTouched);
         }
     }
 
@@ -179,6 +189,8 @@ export class Entity {
     canCollideWith(other: Entity): boolean {
         return false;
     }
+
+    onEntityCollision(other: Entity): void {}
 
     isOnGround(): boolean {
         return this.z === 0 && this.dz < (0.1 / frameLength);
