@@ -61,7 +61,7 @@ export class ClientGame {
             mouse.midX = physFromPx(lerp(0.35 * pxWorldWidth, 0.4 * pxWorldWidth, Math.random()));
         }
         else {
-            mouse.midX = physFromPx(lerp(0.5 * pxWorldWidth, 0.65 * pxWorldWidth, Math.random()));
+            mouse.midX = physFromPx(lerp(0.6 * pxWorldWidth, 0.65 * pxWorldWidth, Math.random()));
         }
         mouse.minY = physFromPx(lerp(0, 0.1 * pxWorldHeight, Math.random()));
         this.entities.push(mouse);

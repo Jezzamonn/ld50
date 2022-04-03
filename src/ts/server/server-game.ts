@@ -108,7 +108,7 @@ export class ServerGame implements EntityList {
         for (let i = 0; i < 20; i++) {
             const holdable = new Holdable(this, uuidv4());
             holdable.holdableType = choose(holdableTypes, this.rng);
-            holdable.midX = physFromPx(Math.round(this.rng() * pxWorldWidth));
+            holdable.midX = this.getRandomXNotOnPath();
             holdable.maxY = physFromPx(Math.round(this.rng() * pxWorldHeight));
             this.entities.push(holdable);
         }
@@ -116,7 +116,7 @@ export class ServerGame implements EntityList {
         // Add a bunch of trees
         for (let i = 0; i < 40; i++) {
             const tree = new Tree(this, uuidv4());
-            tree.midX = physFromPx(Math.round(this.rng() * pxWorldWidth));
+            tree.midX = this.getRandomXNotOnPath();
             tree.maxY = physFromPx(Math.round(this.rng() * pxWorldHeight));
             this.entities.push(tree);
         }
@@ -128,6 +128,15 @@ export class ServerGame implements EntityList {
         //     decor.maxY = physFromPx(Math.round(this.rng() * pxWorldHeight));
         //     this.entities.push(decor);
         // }
+    }
+
+    getRandomXNotOnPath() {
+        const pathSize = 0.2;
+        let r = this.rng() * (1 - pathSize);
+        if (r > (1 - pathSize) / 2) {
+            r += pathSize;
+        }
+        return physFromPx(Math.round(r * pxWorldWidth));
     }
 
 }

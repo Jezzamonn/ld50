@@ -1,3 +1,4 @@
+import { Point } from "../../common";
 import { leftPad } from "../../util";
 import { EntityList } from "../entity-list";
 import { Entity } from "./entity";
@@ -20,6 +21,10 @@ export class Timer extends Entity {
         if (!game.isServer && !timerElement) {
             timerElement = document.querySelector('.timer');
         }
+    }
+
+    canRender(screenCenter: Point): boolean {
+        return true;
     }
 
     render(context: CanvasRenderingContext2D): void {
