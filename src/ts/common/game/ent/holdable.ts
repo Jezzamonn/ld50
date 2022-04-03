@@ -27,6 +27,21 @@ export class Holdable extends Entity {
         this.dampAcceleration = physFromPx(50 / frameLength);
     }
 
+    get distractionLength() {
+        switch (this.holdableType) {
+            case 'grass':
+                return 3;
+            case 'rock':
+                return 5;
+            case 'wood':
+                return 3;
+            case 'wool':
+                return 30;
+            default:
+                return 0;
+        }
+    }
+
     update(dt: number): void {
         this.animCount += dt;
 

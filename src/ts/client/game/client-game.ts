@@ -25,6 +25,8 @@ export class ClientGame {
     gameOver = false;
     gameOverCount = 0;
 
+    isServer = false;
+
     resetFn?: () => void;
 
     constructor(keys: RegularKeys, rng: () => number) {

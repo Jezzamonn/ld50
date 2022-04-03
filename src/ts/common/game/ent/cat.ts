@@ -71,11 +71,11 @@ export class Cat extends Entity {
     onEntityCollision(other: Entity): void {
         if (other instanceof Holdable) {
             other.done = true;
-            this.distractionCount = 5;
+            this.distractionCount = other.distractionLength;
         }
         else if (other instanceof Mouse) {
             other.done = true;
-            this.distractionCount = 5;
+            this.distractionCount = 10;
             this.game.toUpdate.push(other);
         }
         else if (other instanceof House) {

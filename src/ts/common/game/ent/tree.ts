@@ -1,5 +1,5 @@
 import { Aseprite } from "../../aseprite-js";
-import { physFromPx, pxFromPhys, spriteScale } from "../../common";
+import { physFromPx, physFromSpritePx, pxFromPhys, spriteScale } from "../../common";
 import { EntityList } from "../entity-list";
 import { Entity } from "./entity";
 
@@ -9,7 +9,7 @@ export class Tree extends Entity {
         super(game, id);
 
         this.width = physFromPx(25);
-        this.height = physFromPx(15);
+        this.height = physFromPx(20);
         this.type = 'tree';
     }
 
@@ -21,7 +21,7 @@ export class Tree extends Entity {
             frame: 0,
             position: {
                 x: pxFromPhys(this.midX),
-                y: pxFromPhys(this.maxY),
+                y: pxFromPhys(this.maxY) - 2 * spriteScale,
             },
             anchorRatios: {
                 x: 0.5,
