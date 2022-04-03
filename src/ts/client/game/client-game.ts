@@ -95,6 +95,9 @@ export class ClientGame {
         }
 
         this.keys.resetFrame();
+
+        // Slowmo the sound if gameover
+        Sounds.updatePlaybackRate(this.gameOver ? 0.5 : 1, dt);
     }
 
     handlePlayerInput(dt: number) {

@@ -54,7 +54,7 @@ function init() {
         game = new ClientGame(keys, rng);
         game.resetFn = () => reset();
 
-        Sounds.playSound('restart');
+        Sounds.playSound('restart', { volume: 0.5 });
     });
 
     handleFrame();

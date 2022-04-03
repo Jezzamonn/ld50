@@ -88,7 +88,7 @@ export class Cat extends Entity {
             this.game.toUpdate.push(other);
 
             if (!this.game.isServer) {
-                Sounds.playSound('gameover');
+                Sounds.playSound('gameover', { volume: 0.5 });
             }
         }
         else if (other instanceof House) {
@@ -96,7 +96,7 @@ export class Cat extends Entity {
             if (!this.game.gameOver) {
                 console.log('Game over!');
                 if (!this.game.isServer) {
-                    Sounds.playSound('gameover');
+                    Sounds.playSound('gameover', { volume: 0.5 });
                 }
             }
             this.game.gameOver = true;
