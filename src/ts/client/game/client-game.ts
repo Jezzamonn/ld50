@@ -62,6 +62,56 @@ export class ClientGame {
         this.player.handleInput(this.keys, dt);
     }
 
+    updateEntitiesFromServer(serverEntities: any) {
+        const encounteredIds = new Set<string>();
+        for (const serverEntity of serverEntities) {
+            encounteredIds.add(serverEntity.id);
+            if (serverEntity.id === this.player.id) {
+                continue;
+            }
+            // TODO: This could be more efficient.
+            const existing = this.entities.find(e => e.id === serverEntity.id);
+            if (existing) {
+                existing.updateFromObject(serverEntity);
+            }
+            else {
+                const newEnt = this.createEntityFromServer(serverEntity);
+                if (newEnt) {
+                    newEnt.updateFromObject(serverEntity);
+
+                    this.entities.push(newEnt);
+                }
+            }
+        }
+
+        for (const ent of this.entities) {
+            if (ent === this.player) {
+                continue;
+            }
+            if (!encounteredIds.has(ent.id)) {
+                ent.done = true;
+            }
+        }
+    }
+
+    createEntityFromServer(obj: any): Entity | undefined {
+        switch (obj.type) {
+            case "cat":
+                return new Cat(this, obj.id);
+            case "mouse":
+                return new Mouse(this, obj.id);
+            case "tree":
+                return new Tree(this, obj.id);
+            case "decor":
+                return new Decor(this, obj.id);
+            case "holdable":
+                return new Holdable(this, obj.id);
+            default:
+                console.error(`Unknown entity type: ${obj.type}`);
+                return undefined;
+        }
+    }
+
     render(context: CanvasRenderingContext2D) {
         context.resetTransform();
 

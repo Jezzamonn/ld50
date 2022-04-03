@@ -41,16 +41,16 @@ export class ServerGame implements EntityList {
         this.entities.push(cat);
 
         // Add a bunch of holdable things.
-        for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < 10; i++) {
             const holdable = new Holdable(this, uuidv4());
-            holdable.type = choose(holdableTypes, this.rng);
+            holdable.holdableType = choose(holdableTypes, this.rng);
             holdable.midX = physFromPx(Math.round(this.rng() * pxWorldWidth));
             holdable.minY = physFromPx(Math.round(this.rng() * pxWorldHeight));
             this.entities.push(holdable);
         }
 
         // Add a bunch of trees
-        for (let i = 0; i < 200; i++) {
+        for (let i = 0; i < 20; i++) {
             const tree = new Tree(this, uuidv4());
             tree.midX = physFromPx(Math.round(this.rng() * pxWorldWidth));
             tree.maxY = physFromPx(Math.round(this.rng() * pxWorldHeight));
@@ -58,7 +58,7 @@ export class ServerGame implements EntityList {
         }
 
         // Add decor
-        for (let i = 0; i < 500; i++) {
+        for (let i = 0; i < 50; i++) {
             const decor = new Decor(this, uuidv4());
             decor.midX = physFromPx(Math.round(this.rng() * pxWorldWidth));
             decor.maxY = physFromPx(Math.round(this.rng() * pxWorldHeight));

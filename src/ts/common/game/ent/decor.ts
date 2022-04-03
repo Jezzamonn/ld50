@@ -10,6 +10,7 @@ export class Decor extends Entity {
 
         this.width = 0;
         this.height = 0;
+        this.type = 'decor';
     }
 
     render(context: CanvasRenderingContext2D): void {

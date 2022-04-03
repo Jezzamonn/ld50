@@ -29,6 +29,10 @@ function init() {
     socket.on('connect', () => {
         console.log('Connected to server');
     });
+
+    socket.on('update', (entities: any) => {
+        game.updateEntitiesFromServer(entities);
+    });
 }
 
 function handleFrame() {

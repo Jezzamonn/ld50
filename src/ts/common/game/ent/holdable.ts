@@ -10,13 +10,14 @@ export const holdableTypes = ['grass', 'rock', 'wood', 'wool']
 
 export class Holdable extends Entity {
 
-    type: string;
+    holdableType: string;
 
     constructor(game: EntityList, id: string) {
         super(game, id);
 
         this.debugColor = '#3e8948'
-        this.type = 'grass';
+        this.type = 'holdable';
+        this.holdableType = 'grass';
 
         this.dampAcceleration = physFromPx(50 / frameLength);
     }
@@ -57,7 +58,7 @@ export class Holdable extends Entity {
         Aseprite.drawAnimation({
             context,
             image: 'holdable',
-            animationName: this.type,
+            animationName: this.holdableType,
             time: this.animCount,
             position: {
                 x: pxFromPhys(this.midX),
@@ -69,6 +70,17 @@ export class Holdable extends Entity {
             },
             scale: spriteScale,
         });
+    }
+
+    toObject() {
+        return Object.assign(super.toObject(), {
+            holdableType: this.holdableType,
+        });
+    }
+
+    updateFromObject(obj: any) {
+        super.updateFromObject(obj);
+        this.holdableType = obj.holdableType;
     }
 
     canCollideWith(other: Entity): boolean {

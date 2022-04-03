@@ -15,6 +15,7 @@ export class Cat extends Entity {
 
         this.width = physFromPx(120);
         this.height = physFromPx(180);
+        this.type = 'cat';
     }
 
     canCollideWith(other: Entity): boolean {

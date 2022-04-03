@@ -10,6 +10,7 @@ export class Tree extends Entity {
 
         this.width = physFromPx(25);
         this.height = physFromPx(10);
+        this.type = 'tree';
     }
 
     render(context: CanvasRenderingContext2D): void {

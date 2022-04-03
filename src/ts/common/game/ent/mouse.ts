@@ -40,6 +40,7 @@ export class Mouse extends Entity {
         this.width = physFromPx(20);
         this.height = physFromPx(10);
         this.debugColor = undefined;
+        this.type = 'mouse';
 
         this.dampAcceleration = physFromPx(20 / frameLength);
     }
