@@ -137,3 +137,30 @@ export function leftPad(str: string, length: number, padChar: string = ' ') {
     }
     return str;
 }
+
+const secondsPerMinute = 60;
+const minutesPerHour = 60;
+
+export function secondsToFullTimeString(totalSeconds: number) {
+    const deciSeconds = Math.floor((totalSeconds * 10) % 10);
+    const seconds = Math.floor(totalSeconds % secondsPerMinute);
+    const minutes = Math.floor((totalSeconds / secondsPerMinute) % minutesPerHour);
+    const hours = Math.floor(totalSeconds / (secondsPerMinute * minutesPerHour));
+
+    if (hours > 0) {
+        return (
+            hours + ':' +
+            leftPad(minutes.toString(), 2, '0') + ':' +
+            leftPad(seconds.toString(), 2, '0') + '.' +
+            leftPad(deciSeconds.toString(), 1, '0')
+        );
+    }
+    if (minutes > 0) {
+        return (
+            minutes + ':' +
+            leftPad(seconds.toString(), 2, '0') + '.' +
+            leftPad(deciSeconds.toString(), 1, '0')
+        );
+    }
+    return seconds + '.' + leftPad(deciSeconds.toString(), 1, '0');
+}

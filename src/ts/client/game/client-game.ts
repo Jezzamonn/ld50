@@ -12,6 +12,7 @@ import { createEntityFromObject } from "../../common/game/ent/entity-creator";
 import { House } from "../../common/game/ent/house";
 import { Path } from "../../common/game/ent/path";
 import { Sounds } from "../../common/sounds";
+import { DistractionUpdater } from "../../common/game/ent/distraction-updater";
 
 export class ClientGame {
 
@@ -87,6 +88,14 @@ export class ClientGame {
             path.maxY = physFromPx(pxWorldHeight - 200) - i * physFromSpritePx(75);
             this.decorEntities.push(path);
         }
+
+        // Hack to count distraction time.
+        const distractionUpdater = new DistractionUpdater(this, uuidv4());
+        this.decorEntities.push(distractionUpdater);
+    }
+
+    getCat(): Cat | null {
+        return this.entities.find(e => e.type === 'cat') as Cat;
     }
 
     update(dt: number) {
@@ -224,7 +233,7 @@ export class ClientGame {
 
     getCameraFocus() {
         if (this.player.done || this.gameOver) {
-            const cat = this.entities.find(e => e.type === 'cat');
+            const cat = this.getCat();
             if (cat) {
                 return cat;
             }

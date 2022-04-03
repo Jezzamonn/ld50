@@ -69,9 +69,13 @@ h1 {
 }
 
 
-.timer {
+.score {
     position: absolute;
     top: 0;
-    right: 0;
-    text-align: right;
+    left: 4px;
+
+    p {
+        margin-block-start: 5px;
+        margin-block-end: 5px;
+    }
 }

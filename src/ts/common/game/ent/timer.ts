@@ -1,12 +1,9 @@
 import { Point } from "../../common";
-import { leftPad } from "../../util";
+import { leftPad, secondsToFullTimeString } from "../../util";
 import { EntityList } from "../entity-list";
 import { Entity } from "./entity";
 
-let timerElement: HTMLParagraphElement | null = null;
-
-const secondsPerMinute = 60;
-const minutesPerHour = 60;
+let timerElement: HTMLElement | null = null;
 
 // Really hacky way to send the timer down from the server but also have it be pretty synced.
 export class Timer extends Entity {
@@ -19,7 +16,7 @@ export class Timer extends Entity {
         this.type = 'timer';
 
         if (!game.isServer && !timerElement) {
-            timerElement = document.querySelector('.timer');
+            timerElement = document.querySelector('.timer-span');
         }
     }
 
@@ -32,34 +29,10 @@ export class Timer extends Entity {
             return;
         }
 
-        const timeText = this.getTimeString();
+        const timeText = secondsToFullTimeString(this.animCount);
         if (timerElement.innerText != timeText) {
             timerElement.innerText = timeText;
         }
-    }
-
-    getTimeString(): string {
-        const deciSeconds = Math.floor((this.animCount * 10) % 10);
-        const seconds = Math.floor(this.animCount % secondsPerMinute);
-        const minutes = Math.floor((this.animCount / secondsPerMinute) % minutesPerHour);
-        const hours = Math.floor(this.animCount / (secondsPerMinute * minutesPerHour));
-
-        if (hours > 0) {
-            return (
-                hours + ':' +
-                leftPad(minutes.toString(), 2, '0') + ':' +
-                leftPad(seconds.toString(), 2, '0') + '.' +
-                leftPad(deciSeconds.toString(), 1, '0')
-            );
-        }
-        if (minutes > 0) {
-            return (
-                minutes + ':' +
-                leftPad(seconds.toString(), 2, '0') + '.' +
-                leftPad(deciSeconds.toString(), 1, '0')
-            );
-        }
-        return seconds + '.' + leftPad(deciSeconds.toString(), 1, '0');
     }
 
     toObject() {
