@@ -8,4 +8,6 @@ export interface EntityList {
     toUpdate: Entity[];
 
     gameOver: boolean;
+
+    isServer: boolean;
 }

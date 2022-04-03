@@ -20,6 +20,7 @@ export class ServerGame implements EntityList {
     toUpdate: Entity[] = [];
 
     gameOver: boolean = false;
+    isServer: boolean = true;
 
     constructor(rng: () => number) {
         this.rng = rng;

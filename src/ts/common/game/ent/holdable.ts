@@ -1,13 +1,17 @@
 import { Aseprite } from "../../aseprite-js";
 import { frameLength, physFromPx, pxFromPhys, spriteScale } from "../../common";
-import { choose } from "../../util";
+import { choose, lerp } from "../../util";
 import { EntityList } from "../entity-list";
 import { Cat } from "./cat";
 import { Entity } from "./entity";
 import { House } from "./house";
 import { Tree } from "./tree";
+import { v4 as uuidv4 } from "uuid";
 
-export const holdableTypes = ['grass', 'rock', 'wood', 'wool']
+export const holdableTypes = ['grass', 'rock', 'wood', 'wool'];
+
+const spawnSpeed = physFromPx(2 / frameLength);
+const spawnZSpeed = physFromPx(1 / frameLength);
 
 export class Holdable extends Entity {
 
@@ -71,6 +75,31 @@ export class Holdable extends Entity {
             },
             scale: spriteScale,
         });
+    }
+
+    onEntityCollision(other: Entity): void {
+        if (this.holdableType === 'rock' && other instanceof Tree) {
+            // Kills trees. Lol.
+            other.done = true;
+            this.dx = 0;
+            this.dy = 0;
+
+            // Spawn a bunch of holdable things. But I think this only happens on the server?
+            if (this.game.isServer) {
+                for (let i = 0; i < 3; i++) {
+                    const holdableType = choose(['grass', 'wood'], Math.random);
+                    const holdable = new Holdable(this.game, uuidv4());
+                    holdable.holdableType = holdableType;
+                    holdable.x = other.x;
+                    holdable.y = other.y;
+                    holdable.dx = lerp(-spawnSpeed, spawnSpeed, Math.random());
+                    holdable.dy = lerp(-spawnSpeed, spawnSpeed, Math.random());
+                    holdable.dz = -spawnZSpeed;
+
+                    this.game.entities.push(holdable);
+                }
+            }
+        }
     }
 
     toObject() {

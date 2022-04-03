@@ -9,7 +9,7 @@ export class Tree extends Entity {
         super(game, id);
 
         this.width = physFromPx(25);
-        this.height = physFromPx(10);
+        this.height = physFromPx(15);
         this.type = 'tree';
     }
 

@@ -73,8 +73,8 @@ export class Entity {
                     else if (this.dx < 0) {
                         this.minX = ent.maxX;
                     }
+                    lastTouched = ent;
                 }
-                lastTouched = ent;
             }
         }
         if (lastTouched) {
