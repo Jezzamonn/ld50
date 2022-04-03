@@ -78,6 +78,7 @@ export class Holdable extends Entity {
     }
 
     onEntityCollision(other: Entity): void {
+        // Kill trees
         if (this.holdableType === 'rock' && other instanceof Tree) {
             // Kills trees. Lol.
             other.done = true;
@@ -99,6 +100,15 @@ export class Holdable extends Entity {
                     this.game.entities.push(holdable);
                 }
             }
+        }
+        // Grass becomes a new tree if it hits a tree
+        if (this.holdableType === 'grass' && other instanceof Tree) {
+            this.done = true;
+
+            const tree = new Tree(this.game, uuidv4());
+            tree.x = this.x;
+            tree.y = this.y;
+            this.game.entities.push(tree);
         }
     }
 
