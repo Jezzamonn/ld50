@@ -45,7 +45,10 @@ export class ServerGame implements EntityList {
         // }
     }
 
-    getEntitiesAsObjects() {
+    getEntitiesAsObjects({skipDecor = false}: {skipDecor?: boolean} = {}): any[] {
+        if (skipDecor) {
+            return this.entities.filter(e => e.type !== "decor").map(e => e.toObject());
+        }
         return this.entities.map(ent => ent.toObject());
     }
 

@@ -64,9 +64,6 @@ export class ClientGame {
     }
 
     handlePlayerInput(dt: number) {
-        if (this.keys.anyWasPressedThisFrame(restartKeys)) {
-            this.createWorld();
-        }
         this.player.handleInput(this.keys, dt);
     }
 
@@ -113,10 +110,11 @@ export class ClientGame {
     }
 
     getServerUpdateData() {
-        const data = [
-            this.player.toObject(),
-            ...this.toUpdate.map(e => e.toObject()),
-        ];
+        const data = [];
+        if (!this.player.done) {
+            data.push(this.player.toObject());
+        }
+        data.push(...this.toUpdate.map(e => e.toObject()));
         this.toUpdate = [];
         return data;
     }

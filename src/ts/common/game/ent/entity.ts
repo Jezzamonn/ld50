@@ -218,9 +218,6 @@ export class Entity {
 
     updateFromObject(obj: any, smooth = false) {
         const lerpAmt = smooth ? 0.3 : 1;
-        if (this.type === 'mouse') {
-            console.log(`Updating mouse, smooth = ${smooth}`);
-        }
         this.x = lerp(this.x, obj.x, lerpAmt);
         this.y = lerp(this.y, obj.y, lerpAmt);
         this.z = lerp(this.z, obj.z, lerpAmt);

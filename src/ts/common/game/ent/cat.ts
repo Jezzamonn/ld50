@@ -75,6 +75,7 @@ export class Cat extends Entity {
         else if (other instanceof Mouse) {
             other.done = true;
             this.distractionCount = 5;
+            this.game.toUpdate.push(other);
         }
     }
 
