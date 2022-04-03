@@ -7,6 +7,7 @@ import { Entity } from "../../common/game/ent/entity";
 import { Holdable, holdableTypes } from "../../common/game/ent/holdable";
 import { Mouse } from "../../common/game/ent/mouse";
 import { Tree } from "../../common/game/ent/tree";
+import { v4 as uuidv4 } from "uuid";
 
 const restartKeys = ["KeyR"];
 
@@ -29,42 +30,12 @@ export class ClientGame {
     createWorld() {
         this.entities = [];
 
-        // Create the player and the cat
-        const mouse = new Mouse(this);
+        // Create the player.... TODO: figure out how to manage this server side.
+        const mouse = new Mouse(this, uuidv4());
         mouse.midX = physFromPx(pxGameWidth / 2);
         mouse.minY = physFromPx(pxGameHeight / 2);
         this.entities.push(mouse);
         this.player = mouse;
-
-        const cat = new Cat(this);
-        cat.midX = physFromPx(200);
-        cat.maxY = physFromPx(200);
-        this.entities.push(cat);
-
-        // Add a bunch of holdable things.
-        for (let i = 0; i < 10; i++) {
-            const holdable = new Holdable(this);
-            holdable.type = choose(holdableTypes, this.rng);
-            holdable.midX = physFromPx(Math.round(this.rng() * pxGameWidth));
-            holdable.minY = physFromPx(Math.round(this.rng() * pxGameHeight));
-            this.entities.push(holdable);
-        }
-
-        // Add a bunch of trees
-        for (let i = 0; i < 20; i++) {
-            const tree = new Tree(this);
-            tree.midX = physFromPx(Math.round(this.rng() * pxGameWidth));
-            tree.maxY = physFromPx(Math.round(this.rng() * pxGameHeight));
-            this.entities.push(tree);
-        }
-
-        // Add decor
-        for (let i = 0; i < 50; i++) {
-            const decor = new Decor(this);
-            decor.midX = physFromPx(Math.round(this.rng() * pxGameWidth));
-            decor.maxY = physFromPx(Math.round(this.rng() * pxGameHeight));
-            this.entities.push(decor);
-        }
     }
 
     update(dt: number) {

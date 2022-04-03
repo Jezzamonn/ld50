@@ -34,8 +34,8 @@ export class Mouse extends Entity {
     isMoving = false;
     flipped = false;
 
-    constructor(game: EntityList) {
-        super(game);
+    constructor(game: EntityList, id: string) {
+        super(game, id);
 
         this.width = physFromPx(20);
         this.height = physFromPx(10);

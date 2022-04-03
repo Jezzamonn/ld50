@@ -10,8 +10,8 @@ export class Cat extends Entity {
     moveSpeed = physFromPx(0.3 / frameLength);
     distractionCount = 0;
 
-    constructor(game: EntityList) {
-        super(game);
+    constructor(game: EntityList, id: string) {
+        super(game, id);
 
         this.width = physFromPx(120);
         this.height = physFromPx(180);

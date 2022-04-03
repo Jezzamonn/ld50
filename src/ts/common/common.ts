@@ -10,6 +10,9 @@ export const physScale = 64;
 export const pxGameWidth = 800;
 export const pxGameHeight = 600;
 
+export const pxWorldWidth = 8000;
+export const pxWorldHeight = 8000;
+
 export const spriteScale = 2;
 
 export function physFromPx(px: number): number {

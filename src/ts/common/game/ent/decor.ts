@@ -5,8 +5,8 @@ import { Entity } from "./entity";
 
 export class Decor extends Entity {
 
-    constructor(game: EntityList) {
-        super(game);
+    constructor(game: EntityList, id: string) {
+        super(game, id);
 
         this.width = 0;
         this.height = 0;

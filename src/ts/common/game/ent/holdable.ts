@@ -12,8 +12,8 @@ export class Holdable extends Entity {
 
     type: string;
 
-    constructor(game: EntityList) {
-        super(game);
+    constructor(game: EntityList, id: string) {
+        super(game, id);
 
         this.debugColor = '#3e8948'
         this.type = 'grass';

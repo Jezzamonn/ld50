@@ -6,7 +6,9 @@ const pushSpeed = physFromPx(1 / frameLength);
 export class Entity {
 
     game: EntityList;
+    id: string;
     done: boolean = false;
+    type: string;
 
     x: number = 0;
     y: number = 0;
@@ -23,8 +25,10 @@ export class Entity {
 
     debugColor? = '#fef';
 
-    constructor(game: EntityList) {
+    constructor(game: EntityList, id: string) {
         this.game = game;
+        this.id = id;
+        this.type = 'ent';
     }
 
     update(dt: number): void {
@@ -194,6 +198,29 @@ export class Entity {
 
     isOnGround(): boolean {
         return this.z === 0 && this.dz < (0.1 / frameLength);
+    }
+
+    toObject() {
+        // Not sure about sending the speed too. We'll see I guess.
+        return {
+            type: this.type,
+            id: this.id,
+            x: this.x,
+            y: this.y,
+            z: this.z,
+            dx: this.dx,
+            dy: this.dy,
+            dz: this.dz,
+        };
+    }
+
+    updateFromObject(obj: any) {
+        this.x = obj.x;
+        this.y = obj.y;
+        this.z = obj.z;
+        this.dx = obj.dx;
+        this.dy = obj.dy;
+        this.dz = obj.dz;
     }
 
     get minX(): number {

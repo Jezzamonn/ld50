@@ -5,8 +5,8 @@ import { Entity } from "./entity";
 
 export class Tree extends Entity {
 
-    constructor(game: EntityList) {
-        super(game);
+    constructor(game: EntityList, id: string) {
+        super(game, id);
 
         this.width = physFromPx(25);
         this.height = physFromPx(10);
