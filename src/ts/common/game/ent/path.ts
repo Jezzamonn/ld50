@@ -1,5 +1,5 @@
 import { Aseprite } from "../../aseprite-js";
-import { pxFromPhys, spriteScale } from "../../common";
+import { Point, pxFromPhys, spriteScale } from "../../common";
 import { EntityList } from "../entity-list";
 import { Entity } from "./entity";
 
@@ -27,6 +27,10 @@ export class Path extends Entity {
             },
             scale: spriteScale,
         });
+    }
+
+    canRender(screenCenter: Point): boolean {
+        return true;
     }
 
     static loadImage() {

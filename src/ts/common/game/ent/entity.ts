@@ -1,4 +1,4 @@
-import { frameLength, physFromPx, Point, pxFromPhys } from "../../common";
+import { frameLength, physFromPx, Point, pxFromPhys, pxGameHeight, pxGameWidth } from "../../common";
 import { lerp } from "../../util";
 import { EntityList } from "../entity-list";
 
@@ -203,6 +203,17 @@ export class Entity {
 
     isOnGround(): boolean {
         return this.z === 0 && this.dz < (0.1 / frameLength);
+    }
+
+    canRender(screenCenter: Point): boolean {
+        const pxMidX = pxFromPhys(this.midX);
+        const pxMidY = pxFromPhys(this.midY);
+        return (
+            pxMidX > screenCenter.x - 0.7 * pxGameWidth &&
+            pxMidX < screenCenter.x + 0.7 * pxGameWidth &&
+            pxMidY > screenCenter.y - 0.7 * pxGameHeight &&
+            pxMidY < screenCenter.y + 0.7 * pxGameHeight
+        )
     }
 
     toObject() {

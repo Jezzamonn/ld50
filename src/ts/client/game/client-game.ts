@@ -200,7 +200,12 @@ export class ClientGame {
 
         this.renderBg(context);
 
-        this.applyCamera(context);
+        const cameraFocus = this.getCameraFocus();
+        this.centerCameraOn(context, cameraFocus);
+        const centerPoint = {
+            x: pxFromPhys(cameraFocus.midX),
+            y: pxFromPhys(cameraFocus.midY),
+        }
 
         const allRenderables = [...this.entities, ...this.decorEntities];
 
@@ -208,23 +213,21 @@ export class ClientGame {
         allRenderables.sort((a, b) => a.maxY - b.maxY);
 
         for (const ent of allRenderables) {
+            if (!ent.canRender(centerPoint)) {
+                continue;
+            }
             ent.render(context);
         }
     }
 
-    applyCamera(context: CanvasRenderingContext2D) {
+    getCameraFocus() {
         if (this.player.done || this.gameOver) {
             const cat = this.entities.find(e => e.type === 'cat');
             if (cat) {
-                this.centerCameraOn(context, cat);
-            }
-            else {
-                this.centerCameraOn(context, this.player);
+                return cat;
             }
         }
-        else {
-            this.centerCameraOn(context, this.player);
-        }
+        return this.player;
     }
 
     centerCameraOn(context: CanvasRenderingContext2D, entity: Entity) {

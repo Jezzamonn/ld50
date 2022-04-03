@@ -103,6 +103,17 @@ export class Cat extends Entity {
         }
     }
 
+    toObject() {
+        return Object.assign(super.toObject(), {
+            distractionCount: this.distractionCount,
+        });
+    }
+
+    updateFromObject(obj: any, smooth?: boolean): void {
+        super.updateFromObject(obj, smooth);
+        this.distractionCount = obj.distractionCount;
+    }
+
     static loadImage() {
         Aseprite.loadImage({name: 'cat', basePath: 'sprites/'});
     }
