@@ -71,10 +71,12 @@ export class ClientGame {
     createDecor() {
         // Client side decor!
         // Add decor
-        for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < 400; i++) {
             const decor = new Decor(this, uuidv4());
-            decor.midX = physFromPx(Math.round(this.rng() * pxWorldWidth));
-            decor.maxY = physFromPx(Math.round(this.rng() * pxWorldHeight));
+            const decorPxX = lerp(-0.5 * pxWorldWidth, 1.5 * pxWorldWidth, this.rng());
+            const decorPxY = lerp(-0.5 * pxWorldHeight, 1.5 * pxWorldHeight, this.rng());
+            decor.midX = physFromPx(Math.round(decorPxX));
+            decor.maxY = physFromPx(Math.round(decorPxY));
             this.decorEntities.push(decor);
         }
 
