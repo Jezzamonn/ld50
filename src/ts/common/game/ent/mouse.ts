@@ -1,6 +1,7 @@
 import { Aseprite } from "../../aseprite-js";
 import { ACTION_KEYS, DOWN_KEYS, frameLength, LEFT_KEYS, physFromPx, Point, pxFromPhys, RIGHT_KEYS, spriteScale, UP_KEYS } from "../../common";
 import { RegularKeys } from "../../keys";
+import { Sounds } from "../../sounds";
 import { clamp } from "../../util";
 import { EntityList } from "../entity-list";
 import { Cat } from "./cat";
@@ -210,6 +211,8 @@ export class Mouse extends Entity {
         this.rollCount = this.rollTime;
         this.dx = this.rollSpeed * this.facingDirection.x;
         this.dy = this.rollSpeed * this.facingDirection.y;
+
+        Sounds.playSound('dash', { volume: 0.2 });
     }
 
     toObject() {

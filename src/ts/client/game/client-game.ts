@@ -101,6 +101,9 @@ export class ClientGame {
     }
 
     handlePlayerInput(dt: number) {
+        if (this.keys.anyWasPressedThisFrame(ACTION_KEYS)) {
+            Sounds.startSongIfNotAlreadyPlaying();
+        }
         if (this.gameOverCount > 2 && this.keys.anyWasPressedThisFrame(ACTION_KEYS)) {
             // Reset the game somehow.
             if (this.resetFn) {
@@ -229,6 +232,7 @@ export class ClientGame {
         Sounds.loadSound({name: 'meow', path: 'sfx/'});
         Sounds.loadSound({name: 'restart', path: 'sfx/'});
         Sounds.loadSound({name: 'walk', path: 'sfx/'});
+        Sounds.loadSound({name: 'dash', path: 'sfx/'});
 
         // For reference, this song is 92.3076923077 seconds long.
         Sounds.loadSound({name: 'main', path: 'music/'});
