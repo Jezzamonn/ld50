@@ -44,8 +44,13 @@ export class ClientGame {
         }
 
         const mouse = new Mouse(this, playerId);
-        mouse.midX = physFromPx(lerp(0.4 * pxWorldWidth, 0.6 * pxWorldWidth, Math.random()));
-        mouse.minY = physFromPx(lerp(0.4 * pxWorldHeight, 0.6 * pxWorldHeight, Math.random()));
+        if (Math.random() < 0.5) {
+            mouse.midX = physFromPx(lerp(0.4 * pxWorldWidth, 0.45 * pxWorldWidth, Math.random()));
+        }
+        else {
+            mouse.midX = physFromPx(lerp(0.55 * pxWorldWidth, 0.6 * pxWorldWidth, Math.random()));
+        }
+        mouse.minY = physFromPx(lerp(0, 0.1 * pxWorldHeight, Math.random()));
         this.entities.push(mouse);
         this.player = mouse;
 
