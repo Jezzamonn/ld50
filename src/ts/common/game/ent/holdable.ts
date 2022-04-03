@@ -38,6 +38,8 @@ export class Holdable extends Entity {
                 return 3;
             case 'wool':
                 return 30;
+            case 'fish':
+                return 20;
             default:
                 return 0;
         }
@@ -128,6 +130,10 @@ export class Holdable extends Entity {
             tree.x = this.x;
             tree.y = this.y;
             this.game.entities.push(tree);
+        }
+        // Wood becomes a fish if it hits a house
+        if (this.holdableType === 'wood' && other instanceof House) {
+            this.holdableType = 'fish';
         }
     }
 
