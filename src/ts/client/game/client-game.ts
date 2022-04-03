@@ -80,6 +80,9 @@ export class ClientGame {
             this.gameOverCount += dt;
         }
 
+        const gameOverElem = document.querySelector('.gameover');
+        gameOverElem?.classList.toggle('hidden', !this.gameOver);
+
         this.handlePlayerInput(dt);
 
         for (const ent of this.entities) {

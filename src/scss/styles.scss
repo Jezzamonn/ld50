@@ -20,6 +20,10 @@ h2 {
     font-size: 48px;
 }
 
+h1 {
+    font-size: 64px;
+}
+
 @font-face {
     font-family: 'Skullboy';
     src: url('../font/ChevyRay - Skullboy.ttf') format('truetype');
@@ -56,6 +60,12 @@ h2 {
 
 .hidden {
     display: none;
+}
+
+
+.canvas {
+    position: absolute;
+    z-index: -1;
 }
 
 
