@@ -111,10 +111,6 @@ export class ClientGame {
             }
         }
 
-        if (this.keys.anyWasPressedThisFrame(MUTE_KEYS)) {
-            Sounds.toggleMute();
-        }
-
         this.player.handleInput(this.keys, dt);
     }
 

@@ -1,0 +1,46 @@
+html, body {
+    margin: 0;
+    overflow: hidden;
+
+    font-family: 'Skullboy',sans-serif;
+    color: #80542e;
+}
+
+p {
+    font-size: 32px;
+}
+
+h2 {
+    font-size: 48px;
+}
+
+@font-face {
+    font-family: 'Skullboy';
+    src: url('../font/ChevyRay - Skullboy.ttf') format('truetype');
+}
+
+.container {
+    position: relative;
+}
+
+.screen {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 800px;
+    height: 600px;
+}
+
+.title-image {
+    position: absolute;
+    z-index: -1;
+}
+
+.centered-text {
+    text-align: center;
+}
+
+.hidden {
+    display: none;
+}

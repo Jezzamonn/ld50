@@ -4,6 +4,9 @@ import { seededRandom } from "../common/util";
 import { ClientGame } from "./game/client-game";
 import { io, Socket } from 'socket.io-client';
 import { Sounds } from "../common/sounds";
+import { ACTION_KEYS, MUTE_KEYS } from "../common/common";
+
+let gameState = 'title';
 
 let canvas: HTMLCanvasElement;
 let context: CanvasRenderingContext2D;
@@ -26,6 +29,7 @@ function init() {
     Aseprite.disableSmoothing(context);
 
     keys = new KeyboardKeys();
+    keys.setUp();
     rng = seededRandom("qwrjafdskafsd;lkas;afek;");
 
     ClientGame.loadAllImages();
@@ -33,10 +37,31 @@ function init() {
 
     Sounds.loadMuteState();
 
+    Sounds.setSong('main');
+
+    document.addEventListener('keydown', (evt) => {
+        if (MUTE_KEYS.includes(evt.code)) {
+            Sounds.toggleMute();
+        }
+
+        if (gameState === 'title') {
+            if (ACTION_KEYS.includes(evt.code)) {
+                hideTitle();
+                startGame();
+            }
+        }
+    });
+}
+
+function hideTitle() {
+    document.querySelector('.title')!.classList.add('hidden');
+}
+
+function startGame() {
+    gameState = 'game';
+
     game = new ClientGame(keys, rng);
     game.resetFn = () => reset();
-
-    keys.setUp();
 
     socket = io('http://localhost:3000');
     socket.on('connect', () => {
@@ -58,8 +83,6 @@ function init() {
     });
 
     handleFrame();
-
-    Sounds.setSong('main');
 }
 
 function reset() {
@@ -74,6 +97,7 @@ function handleFrame() {
     let currentTimeMs = Date.now();
     const maxSteps = 10;
     let steps = 0;
+
     while (currentTimeMs > simulatedTimeMs) {
         if (steps >= maxSteps) {
             simulatedTimeMs = currentTimeMs;
