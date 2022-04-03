@@ -27,7 +27,10 @@ export class Timer extends Entity {
             return;
         }
 
-        timerElement.innerText = this.getTimeString();
+        const timeText = this.getTimeString();
+        if (timerElement.innerText != timeText) {
+            timerElement.innerText = timeText;
+        }
     }
 
     getTimeString(): string {
@@ -36,7 +39,6 @@ export class Timer extends Entity {
         const minutes = Math.floor((this.animCount / secondsPerMinute) % minutesPerHour);
         const hours = Math.floor(this.animCount / (secondsPerMinute * minutesPerHour));
 
-        let timeText = '';
         if (hours > 0) {
             return (
                 hours + ':' +

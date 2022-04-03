@@ -26,6 +26,10 @@ export class ClientGame {
     gameOver = false;
     gameOverCount = 0;
 
+    get canRestart() {
+        return this.gameOverCount > 2;
+    }
+
     isServer = false;
 
     resetFn?: () => void;
@@ -83,6 +87,9 @@ export class ClientGame {
         const gameOverElem = document.querySelector('.gameover');
         gameOverElem?.classList.toggle('hidden', !this.gameOver);
 
+        const respawnElem = document.querySelector('.respawn-text');
+        respawnElem?.classList.toggle('hidden', !this.canRestart);
+
         this.handlePlayerInput(dt);
 
         for (const ent of this.entities) {
@@ -107,7 +114,7 @@ export class ClientGame {
         if (this.keys.anyWasPressedThisFrame(ACTION_KEYS)) {
             Sounds.startSongIfNotAlreadyPlaying();
         }
-        if (this.gameOverCount > 2 && this.keys.anyWasPressedThisFrame(ACTION_KEYS)) {
+        if (this.canRestart && this.keys.anyWasPressedThisFrame(ACTION_KEYS)) {
             // Reset the game somehow.
             if (this.resetFn) {
                 this.resetFn();
