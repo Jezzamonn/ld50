@@ -81,10 +81,18 @@ export class ServerGame implements EntityList {
         cat.maxY = physFromPx(0);
         this.entities.push(cat);
 
-        const house = new House(this, uuidv4());
-        house.midX = physFromPx(pxWorldWidth / 2);
-        house.maxY = physFromPx(pxWorldHeight);
-        this.entities.push(house);
+        const houseOffsets = [
+            {x: 0, y: 0},
+            {x: -100, y: 100},
+            {x: 100, y: 100},
+        ]
+
+        for (const houseOffset of houseOffsets) {
+            const house = new House(this, uuidv4());
+            house.midX = physFromPx(pxWorldWidth / 2 + houseOffset.x);
+            house.maxY = physFromPx(pxWorldHeight + houseOffset.y);
+            this.entities.push(house);
+        }
 
         // Path added on the client.
 
