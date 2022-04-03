@@ -51,6 +51,18 @@ export class ServerGame implements EntityList {
         // }
     }
 
+    getScore() {
+        return this.entities.find(e => e.type === 'timer')?.animCount ?? 0;
+    }
+
+    setBestScore(score: number) {
+        const timer = this.entities.find(e => e.type === 'timer');
+        if (!timer) {
+            return;
+        }
+        (timer as Timer).bestScore = score;
+    }
+
     getEntitiesAsObjects({skipDecor = false}: {skipDecor?: boolean} = {}): any[] {
         if (skipDecor) {
             return this.entities.filter(e => e.type !== "decor").map(e => e.toObject());

@@ -10,7 +10,7 @@ import { Mouse } from "./mouse";
 
 export class Cat extends Entity {
 
-    moveSpeed = physFromPx(0.3 / frameLength);
+    moveSpeed = physFromPx(5 / frameLength);
     distractionCount = 0;
 
     constructor(game: EntityList, id: string) {

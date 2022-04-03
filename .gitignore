@@ -1,6 +1,7 @@
 build/
 promo/
 node_modules/
+localStorage/
 
 *.band/
 
