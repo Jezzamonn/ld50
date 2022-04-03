@@ -25,15 +25,20 @@ export class ClientGame {
         this.keys = keys;
         this.rng = rng;
 
-        this.createWorld();
+        this.entities = [];
+
+        this.createPlayer();
     }
 
     // TODO: Move this to the server
-    createWorld() {
-        this.entities = [];
+    createPlayer() {
+        let playerId = sessionStorage.getItem('kitastrophe-player-id');
+        if (!playerId) {
+            playerId = uuidv4();
+            sessionStorage.setItem('kitastrophe-player-id', playerId);
+        }
 
-        // Create the player.... TODO: figure out how to manage this server side.
-        const mouse = new Mouse(this, uuidv4());
+        const mouse = new Mouse(this, playerId);
         mouse.midX = physFromPx(pxGameWidth * Math.random());
         mouse.minY = physFromPx(pxGameHeight * Math.random());
         this.entities.push(mouse);
