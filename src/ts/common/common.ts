@@ -15,6 +15,12 @@ export const pxWorldHeight = 600 * 2;
 
 export const spriteScale = 2;
 
+export const UP_KEYS = ["KeyW", "ArrowUp"];
+export const DOWN_KEYS = ["KeyS", "ArrowDown"];
+export const LEFT_KEYS = ["KeyA", "ArrowLeft"];
+export const RIGHT_KEYS = ["KeyD", "ArrowRight"];
+export const ACTION_KEYS = ["Space"];
+
 export function physFromPx(px: number): number {
     return px * physScale;
 }

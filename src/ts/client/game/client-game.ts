@@ -1,4 +1,4 @@
-import { physFromPx, physFromSpritePx, physScale, pxFromPhys, pxGameHeight, pxGameWidth, pxWorldHeight, pxWorldWidth } from "../../common/common";
+import { ACTION_KEYS, physFromPx, physFromSpritePx, physScale, pxFromPhys, pxGameHeight, pxGameWidth, pxWorldHeight, pxWorldWidth } from "../../common/common";
 import { RegularKeys } from "../../common/keys";
 import { choose, lerp, rgb } from "../../common/util";
 import { Cat } from "../../common/game/ent/cat";
@@ -23,6 +23,9 @@ export class ClientGame {
     player!: Mouse;
 
     gameOver = false;
+    gameOverCount = 0;
+
+    resetFn?: () => void;
 
     constructor(keys: RegularKeys, rng: () => number) {
         this.keys = keys;
@@ -65,6 +68,10 @@ export class ClientGame {
     }
 
     update(dt: number) {
+        if (this.gameOver) {
+            this.gameOverCount += dt;
+        }
+
         this.handlePlayerInput(dt);
 
         for (const ent of this.entities) {
@@ -83,6 +90,12 @@ export class ClientGame {
     }
 
     handlePlayerInput(dt: number) {
+        if (this.gameOverCount > 2 && this.keys.anyWasPressedThisFrame(ACTION_KEYS)) {
+            // Reset the game somehow.
+            if (this.resetFn) {
+                this.resetFn();
+            }
+        }
         this.player.handleInput(this.keys, dt);
     }
 

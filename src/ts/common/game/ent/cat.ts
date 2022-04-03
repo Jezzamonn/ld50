@@ -8,7 +8,7 @@ import { Mouse } from "./mouse";
 
 export class Cat extends Entity {
 
-    moveSpeed = physFromPx(8 / frameLength);
+    moveSpeed = physFromPx(0.3 / frameLength);
     distractionCount = 0;
 
     constructor(game: EntityList, id: string) {
@@ -79,7 +79,10 @@ export class Cat extends Entity {
             this.game.toUpdate.push(other);
         }
         else if (other instanceof House) {
-            this.distractionCount = 5;
+            this.distractionCount = 1;
+            if (!this.game.gameOver) {
+                console.log('Game over!');
+            }
             this.game.gameOver = true;
         }
     }

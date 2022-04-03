@@ -38,6 +38,13 @@ io.on('connection', (socket: Socket) => {
     socket.on('update', (entities: any) => {
         game?.updateEntitiesFromClient(entities);
     });
+
+    socket.on('reset', () => {
+        console.log('Resetting game');
+        game = new ServerGame(rng);
+        handleFrame(game);
+        io.emit('reset');
+    })
 });
 
 setInterval(() => {

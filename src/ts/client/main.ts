@@ -4,9 +4,13 @@ import { seededRandom } from "../common/util";
 import { ClientGame } from "./game/client-game";
 import { io, Socket } from 'socket.io-client';
 
-let game: ClientGame;
 let canvas: HTMLCanvasElement;
 let context: CanvasRenderingContext2D;
+
+let keys: RegularKeys;
+let rng: () => number;
+let game: ClientGame;
+
 let simulatedTimeMs: number;
 const fixedTimeStep = 1 / 60;
 
@@ -20,12 +24,14 @@ function init() {
     context = canvas.getContext("2d")!;
     Aseprite.disableSmoothing(context);
 
-    const keys = new KeyboardKeys();
-    const rng = seededRandom("qwrjafdskafsd;lkas;afek;");
+    keys = new KeyboardKeys();
+    rng = seededRandom("qwrjafdskafsd;lkas;afek;");
 
     ClientGame.loadAllImages();
 
     game = new ClientGame(keys, rng);
+    game.resetFn = () => reset();
+
     keys.setUp();
 
     socket = io('http://localhost:3000');
@@ -39,7 +45,18 @@ function init() {
         game.updateEntitiesFromServer(entities);
     });
 
+    socket.on('reset', () => {
+        console.log('Resetting game');
+        game = new ClientGame(keys, rng);
+        game.resetFn = () => reset();
+    })
+
+
     handleFrame();
+}
+
+function reset() {
+    socket.emit('reset');
 }
 
 function handleFrame() {

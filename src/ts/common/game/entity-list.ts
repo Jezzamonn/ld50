@@ -6,4 +6,6 @@ export interface EntityList {
     // On the client: Entities to send to the server.
     // On the server: unused.
     toUpdate: Entity[];
+
+    gameOver: boolean;
 }

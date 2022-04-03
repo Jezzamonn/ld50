@@ -1,5 +1,5 @@
 import { Aseprite } from "../../aseprite-js";
-import { frameLength, physFromPx, Point, pxFromPhys, spriteScale } from "../../common";
+import { ACTION_KEYS, DOWN_KEYS, frameLength, LEFT_KEYS, physFromPx, Point, pxFromPhys, RIGHT_KEYS, spriteScale, UP_KEYS } from "../../common";
 import { RegularKeys } from "../../keys";
 import { clamp } from "../../util";
 import { EntityList } from "../entity-list";
@@ -8,12 +8,6 @@ import { Entity } from "./entity";
 import { Holdable } from "./holdable";
 import { House } from "./house";
 import { Tree } from "./tree";
-
-const UP_KEYS = ["KeyW", "ArrowUp"];
-const DOWN_KEYS = ["KeyS", "ArrowDown"];
-const LEFT_KEYS = ["KeyA", "ArrowLeft"];
-const RIGHT_KEYS = ["KeyD", "ArrowRight"];
-const ACTION_KEYS = ["Space"];
 
 export class Mouse extends Entity {
 
