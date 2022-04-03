@@ -1,6 +1,7 @@
 import { Aseprite } from "../../aseprite-js";
 import { frameLength, physFromPx, physScale, pxFromPhys, spriteScale } from "../../common";
 import { Sounds } from "../../sounds";
+import { clampedSlurp } from "../../util";
 import { EntityList } from "../entity-list";
 import { Entity } from "./entity";
 import { Holdable } from "./holdable";
@@ -75,7 +76,10 @@ export class Cat extends Entity {
             this.distractionCount = other.distractionLength;
 
             if (!this.game.isServer) {
-                Sounds.playSound('meow');
+                // Louder depending on how good of a distraction it was.
+                Sounds.playSound('meow', {
+                    volume: clampedSlurp(0.2, 1, this.distractionCount / 30),
+                });
             }
         }
         else if (other instanceof Mouse) {
