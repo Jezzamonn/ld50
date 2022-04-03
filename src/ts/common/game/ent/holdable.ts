@@ -134,6 +134,9 @@ export class Holdable extends Entity {
         // Wood becomes a fish if it hits a house
         if (this.holdableType === 'wood' && other instanceof House) {
             this.holdableType = 'fish';
+            // bounce back
+            this.dx = -0.5 * this.dx;
+            this.dy = -0.5 * this.dy;
         }
     }
 
