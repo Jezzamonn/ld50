@@ -10,7 +10,7 @@ import { Mouse } from "./mouse";
 
 export class Cat extends Entity {
 
-    moveSpeed = physFromPx(10 / frameLength);
+    moveSpeed = physFromPx(0.3 / frameLength);
     distractionCount = 0;
 
     constructor(game: EntityList, id: string) {
@@ -84,7 +84,7 @@ export class Cat extends Entity {
         }
         else if (other instanceof Mouse) {
             other.done = true;
-            this.distractionCount = 10;
+            this.distractionCount = 2;
             this.game.toUpdate.push(other);
 
             if (!this.game.isServer) {

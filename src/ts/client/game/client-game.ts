@@ -22,6 +22,11 @@ export class ClientGame {
     toUpdate: Entity[] = [];
     decorEntities: Entity[] = [];
     player!: Mouse;
+    playerDeadCount = 0;
+
+    get canRespawn() {
+        return this.player.done && this.playerDeadCount > 1;
+    }
 
     gameOver = false;
     gameOverCount = 0;
@@ -41,26 +46,29 @@ export class ClientGame {
         this.entities = [];
 
         this.createPlayer();
+        this.createDecor();
     }
 
     createPlayer() {
-        let playerId = sessionStorage.getItem('kitastrophe-player-id');
+        let playerId = localStorage.getItem('kitastrophe-player-id');
         if (!playerId) {
             playerId = uuidv4();
-            sessionStorage.setItem('kitastrophe-player-id', playerId);
+            localStorage.setItem('kitastrophe-player-id', playerId);
         }
 
         const mouse = new Mouse(this, playerId);
         if (Math.random() < 0.5) {
-            mouse.midX = physFromPx(lerp(0.4 * pxWorldWidth, 0.45 * pxWorldWidth, Math.random()));
+            mouse.midX = physFromPx(lerp(0.35 * pxWorldWidth, 0.4 * pxWorldWidth, Math.random()));
         }
         else {
-            mouse.midX = physFromPx(lerp(0.55 * pxWorldWidth, 0.6 * pxWorldWidth, Math.random()));
+            mouse.midX = physFromPx(lerp(0.5 * pxWorldWidth, 0.65 * pxWorldWidth, Math.random()));
         }
         mouse.minY = physFromPx(lerp(0, 0.1 * pxWorldHeight, Math.random()));
         this.entities.push(mouse);
         this.player = mouse;
+    }
 
+    createDecor() {
         // Client side decor!
         // Add decor
         for (let i = 0; i < 100; i++) {
@@ -84,11 +92,18 @@ export class ClientGame {
             this.gameOverCount += dt;
         }
 
+        if (this.player.done) {
+            this.playerDeadCount += dt;
+        }
+
         const gameOverElem = document.querySelector('.gameover');
         gameOverElem?.classList.toggle('hidden', !this.gameOver);
 
+        const restartElem = document.querySelector('.restart-text');
+        restartElem?.classList.toggle('hidden', !this.canRestart);
+
         const respawnElem = document.querySelector('.respawn-text');
-        respawnElem?.classList.toggle('hidden', !this.canRestart);
+        respawnElem?.classList.toggle('hidden', !(this.canRespawn && !this.canRestart));
 
         this.handlePlayerInput(dt);
 
@@ -113,11 +128,15 @@ export class ClientGame {
     handlePlayerInput(dt: number) {
         if (this.keys.anyWasPressedThisFrame(ACTION_KEYS)) {
             Sounds.startSongIfNotAlreadyPlaying();
-        }
-        if (this.canRestart && this.keys.anyWasPressedThisFrame(ACTION_KEYS)) {
-            // Reset the game somehow.
-            if (this.resetFn) {
-                this.resetFn();
+
+            if (this.canRestart) {
+                if (this.resetFn) {
+                    this.resetFn();
+                }
+            }
+            else if (this.canRespawn) {
+                this.playerDeadCount = 0;
+                this.createPlayer();
             }
         }
 
