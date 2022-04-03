@@ -8,6 +8,7 @@ import { Tree } from "../common/game/ent/tree";
 import { EntityList } from "../common/game/entity-list";
 import { choose } from "../common/util";
 import { v4 as uuidv4 } from "uuid";
+import { createEntityFromObject } from "../common/game/ent/entity-creator";
 
 export class ServerGame implements EntityList {
     rng: () => number;
@@ -28,6 +29,24 @@ export class ServerGame implements EntityList {
 
     getEntitiesAsObjects() {
         return this.entities.map(ent => ent.toObject());
+    }
+
+    updateEntitiesFromClient(clientEntities: any) {
+        for (const serverEntity of clientEntities) {
+            // TODO: This could be more efficient.
+            const existing = this.entities.find(e => e.id === serverEntity.id);
+            if (existing) {
+                existing.updateFromObject(serverEntity);
+            }
+            else {
+                const newEnt = createEntityFromObject(this, serverEntity);
+                if (newEnt) {
+                    newEnt.updateFromObject(serverEntity);
+
+                    this.entities.push(newEnt);
+                }
+            }
+        }
     }
 
     createWorld() {

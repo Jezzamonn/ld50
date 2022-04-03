@@ -19,6 +19,8 @@ let simulatedTimeMs: number | undefined;
 let fixedTimeStep = 1 / 60;
 const rng = seededRandom("aaflafskjlasfdlasjwf");
 
+const updatePeriodMs = 1000 / 20;
+
 app.get('/', (req: express.Request, res: express.Response) => {
     res.send('Hello World!');
 });
@@ -28,10 +30,14 @@ io.on('connection', (socket: Socket) => {
 
     if (game == undefined) {
         game = new ServerGame(rng);
-        handleFrame();
+        handleFrame(game);
     }
     // To start with just send the initial state.
     socket.emit('update', game.getEntitiesAsObjects());
+
+    socket.on('update', (entities: any) => {
+        game?.updateEntitiesFromClient(entities);
+    });
 });
 
 setInterval(() => {
@@ -39,26 +45,26 @@ setInterval(() => {
         return;
     }
     io.emit('update', game.getEntitiesAsObjects());
-}, 500)
+}, updatePeriodMs)
 
 server.listen(3000, () => {
     console.log('Listening on port 3000');
 });
 
 // Game loop
-function handleFrame() {
-    // if (game == null) {
-    //     return;
-    // }
-    // if (simulatedTimeMs === undefined) {
-    //     simulatedTimeMs = Date.now();
-    // }
+function handleFrame(loopGame: ServerGame) {
+    if (loopGame != game) {
+        return;
+    }
+    if (simulatedTimeMs === undefined) {
+        simulatedTimeMs = Date.now();
+    }
 
-    // let currentTimeMs = Date.now();
-    // while (currentTimeMs > simulatedTimeMs) {
-    //     game.update(fixedTimeStep);
-    //     simulatedTimeMs += fixedTimeStep * 1000;
-    // }
+    let currentTimeMs = Date.now();
+    while (currentTimeMs > simulatedTimeMs) {
+        loopGame.update(fixedTimeStep);
+        simulatedTimeMs += fixedTimeStep * 1000;
+    }
 
-    // setImmediate(handleFrame);
+    setImmediate(() => handleFrame(loopGame));
 }

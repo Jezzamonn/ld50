@@ -8,6 +8,7 @@ import { Holdable, holdableTypes } from "../../common/game/ent/holdable";
 import { Mouse } from "../../common/game/ent/mouse";
 import { Tree } from "../../common/game/ent/tree";
 import { v4 as uuidv4 } from "uuid";
+import { createEntityFromObject } from "../../common/game/ent/entity-creator";
 
 const restartKeys = ["KeyR"];
 
@@ -32,8 +33,8 @@ export class ClientGame {
 
         // Create the player.... TODO: figure out how to manage this server side.
         const mouse = new Mouse(this, uuidv4());
-        mouse.midX = physFromPx(pxGameWidth / 2);
-        mouse.minY = physFromPx(pxGameHeight / 2);
+        mouse.midX = physFromPx(pxGameWidth * Math.random());
+        mouse.minY = physFromPx(pxGameHeight * Math.random());
         this.entities.push(mouse);
         this.player = mouse;
     }
@@ -75,10 +76,8 @@ export class ClientGame {
                 existing.updateFromObject(serverEntity);
             }
             else {
-                const newEnt = this.createEntityFromServer(serverEntity);
+                const newEnt = createEntityFromObject(this, serverEntity);
                 if (newEnt) {
-                    newEnt.updateFromObject(serverEntity);
-
                     this.entities.push(newEnt);
                 }
             }
@@ -91,24 +90,6 @@ export class ClientGame {
             if (!encounteredIds.has(ent.id)) {
                 ent.done = true;
             }
-        }
-    }
-
-    createEntityFromServer(obj: any): Entity | undefined {
-        switch (obj.type) {
-            case "cat":
-                return new Cat(this, obj.id);
-            case "mouse":
-                return new Mouse(this, obj.id);
-            case "tree":
-                return new Tree(this, obj.id);
-            case "decor":
-                return new Decor(this, obj.id);
-            case "holdable":
-                return new Holdable(this, obj.id);
-            default:
-                console.error(`Unknown entity type: ${obj.type}`);
-                return undefined;
         }
     }
 
