@@ -19,6 +19,8 @@ export class ServerGame implements EntityList {
     // Unused?
     toUpdate: Entity[] = [];
 
+    gameOver: boolean = false;
+
     constructor(rng: () => number) {
         this.rng = rng;
         // TODO: This need to happen when a player connects.

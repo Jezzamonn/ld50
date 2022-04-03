@@ -22,6 +22,8 @@ export class ClientGame {
     decorEntities: Entity[] = [];
     player!: Mouse;
 
+    gameOver = false;
+
     constructor(keys: RegularKeys, rng: () => number) {
         this.keys = keys;
         this.rng = rng;
@@ -141,7 +143,20 @@ export class ClientGame {
 
         this.renderBg(context);
 
-        if (this.player.done) {
+        this.applyCamera(context);
+
+        const allRenderables = [...this.entities, ...this.decorEntities];
+
+        // Sort the entities by y position
+        allRenderables.sort((a, b) => a.maxY - b.maxY);
+
+        for (const ent of allRenderables) {
+            ent.render(context);
+        }
+    }
+
+    applyCamera(context: CanvasRenderingContext2D) {
+        if (this.player.done || this.gameOver) {
             const cat = this.entities.find(e => e.type === 'cat');
             if (cat) {
                 this.centerCameraOn(context, cat);
@@ -152,15 +167,6 @@ export class ClientGame {
         }
         else {
             this.centerCameraOn(context, this.player);
-        }
-
-        const allRenderables = [...this.entities, ...this.decorEntities];
-
-        // Sort the entities by y position
-        allRenderables.sort((a, b) => a.maxY - b.maxY);
-
-        for (const ent of allRenderables) {
-            ent.render(context);
         }
     }
 
