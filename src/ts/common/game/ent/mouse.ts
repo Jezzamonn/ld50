@@ -209,6 +209,21 @@ export class Mouse extends Entity {
         this.dy = this.rollSpeed * this.facingDirection.y;
     }
 
+    toObject() {
+        return Object.assign(super.toObject(), {
+            isMoving: this.isMoving,
+            flipped: this.flipped,
+            rollCount: this.rollCount,
+        });
+    }
+
+    updateFromObject(obj: any) {
+        super.updateFromObject(obj);
+        this.isMoving = obj.isMoving;
+        this.flipped = obj.flipped;
+        this.rollCount = obj.rollCount;
+    }
+
     static loadImage() {
         Aseprite.loadImage({name: 'mouse', basePath: 'sprites/'});
     }
