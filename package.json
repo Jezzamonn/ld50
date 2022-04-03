@@ -12,6 +12,7 @@
     "webpack": "webpack",
     "build": "npm-run-all --parallel webpack sass static sprites music",
     "server": "node build/server/server.bundle.js",
+    "watch-server": "nodemon build/server/server.bundle.js",
     "clean": "rm -rf build/*"
   },
   "watch": {
@@ -61,6 +62,7 @@
     "@types/uuid": "^8.3.4",
     "babel-loader": "^8.2.4",
     "express": "^4.17.3",
+    "nodemon": "^2.0.15",
     "npm-run-all": "^4.1.5",
     "npm-watch": "^0.11.0",
     "reload": "^3.2.0",
