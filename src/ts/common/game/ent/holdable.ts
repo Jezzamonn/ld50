@@ -78,8 +78,8 @@ export class Holdable extends Entity {
         });
     }
 
-    updateFromObject(obj: any) {
-        super.updateFromObject(obj);
+    updateFromObject(obj: any, smooth: boolean = false) {
+        super.updateFromObject(obj, smooth);
         this.holdableType = obj.holdableType;
     }
 

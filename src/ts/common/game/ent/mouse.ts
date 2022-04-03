@@ -219,8 +219,8 @@ export class Mouse extends Entity {
         });
     }
 
-    updateFromObject(obj: any) {
-        super.updateFromObject(obj);
+    updateFromObject(obj: any, smooth: boolean = false) {
+        super.updateFromObject(obj, smooth);
         this.isMoving = obj.isMoving;
         this.flipped = obj.flipped;
         this.rollCount = obj.rollCount;
