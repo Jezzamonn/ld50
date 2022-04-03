@@ -217,7 +217,7 @@ export class Entity {
     }
 
     updateFromObject(obj: any, smooth = false) {
-        const lerpAmt = smooth ? 1 : 0.3;
+        const lerpAmt = smooth ? 0.3 : 1;
         this.x = lerp(this.x, obj.x, lerpAmt);
         this.y = lerp(this.y, obj.y, lerpAmt);
         this.z = lerp(this.z, obj.z, lerpAmt);

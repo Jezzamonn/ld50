@@ -34,6 +34,15 @@ export class ServerGame implements EntityList {
                 console.log(`Done: ${ent.type} ${ent.id}`);
             }
         }
+
+        // if (this.rng() < 0.01) {
+        //     // Add a new thingo?
+        //     const newEnt = new Holdable(this, uuidv4());
+        //     newEnt.holdableType = choose(holdableTypes, this.rng);
+        //     newEnt.midX = physFromPx(Math.round(this.rng() * pxWorldWidth));
+        //     newEnt.maxY = physFromPx(Math.round(this.rng() * pxWorldHeight));
+        //     this.entities.push(newEnt);
+        // }
     }
 
     getEntitiesAsObjects() {
@@ -72,7 +81,7 @@ export class ServerGame implements EntityList {
             const holdable = new Holdable(this, uuidv4());
             holdable.holdableType = choose(holdableTypes, this.rng);
             holdable.midX = physFromPx(Math.round(this.rng() * pxWorldWidth));
-            holdable.minY = physFromPx(Math.round(this.rng() * pxWorldHeight));
+            holdable.maxY = physFromPx(Math.round(this.rng() * pxWorldHeight));
             this.entities.push(holdable);
         }
 
