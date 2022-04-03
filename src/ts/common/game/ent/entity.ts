@@ -1,4 +1,5 @@
 import { frameLength, physFromPx, Point, pxFromPhys } from "../../common";
+import { lerp } from "../../util";
 import { EntityList } from "../entity-list";
 
 const pushSpeed = physFromPx(1 / frameLength);
@@ -215,9 +216,10 @@ export class Entity {
     }
 
     updateFromObject(obj: any) {
-        this.x = obj.x;
-        this.y = obj.y;
-        this.z = obj.z;
+        const lerpAmt = 0.3;
+        this.x = lerp(this.x, obj.x, lerpAmt);
+        this.y = lerp(this.y, obj.y, lerpAmt);
+        this.z = lerp(this.z, obj.z, lerpAmt);
         this.dx = obj.dx;
         this.dy = obj.dy;
         this.dz = obj.dz;
