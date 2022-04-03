@@ -130,3 +130,10 @@ export function choose<T>(arr: Array<T>, rng: () => number): T {
     const index = Math.floor(rng() * arr.length);
     return arr[index];
 }
+
+export function leftPad(str: string, length: number, padChar: string = ' ') {
+    while (str.length < length) {
+        str = padChar + str;
+    }
+    return str;
+}

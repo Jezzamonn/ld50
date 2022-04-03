@@ -11,6 +11,7 @@ import { v4 as uuidv4 } from "uuid";
 import { createEntityFromObject } from "../common/game/ent/entity-creator";
 import { House } from "../common/game/ent/house";
 import { Path } from "../common/game/ent/path";
+import { Timer } from "../common/game/ent/timer";
 
 export class ServerGame implements EntityList {
     rng: () => number;
@@ -83,6 +84,10 @@ export class ServerGame implements EntityList {
         cat.midX = physFromPx(pxWorldWidth / 2);
         cat.maxY = physFromPx(0);
         this.entities.push(cat);
+
+        // Timer element
+        const timer = new Timer(this, uuidv4());
+        this.entities.push(timer);
 
         const houseOffsets = [
             {x: 0, y: 0},

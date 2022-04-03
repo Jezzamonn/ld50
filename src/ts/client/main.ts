@@ -59,7 +59,7 @@ function init() {
 }
 
 function updateWhichElementsAreVisible() {
-    document.querySelector('.canvas')!.classList.toggle('hidden', gameState !== 'game');
+    document.querySelector('.game')!.classList.toggle('hidden', gameState !== 'game');
     document.querySelector('.title')!.classList.toggle('hidden', gameState !== 'title');
     document.querySelector('.instructions')!.classList.toggle('hidden', gameState !== 'instructions');
     document.querySelector('.instructions2')!.classList.toggle('hidden', gameState !== 'instructions2');
