@@ -1,3 +1,6 @@
 build/
 promo/
 node_modules/
+
+*.band/
+
