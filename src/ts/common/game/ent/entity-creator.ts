@@ -3,7 +3,9 @@ import { Cat } from "./cat";
 import { Decor } from "./decor";
 import { Entity } from "./entity";
 import { Holdable } from "./holdable";
+import { House } from "./house";
 import { Mouse } from "./mouse";
+import { Path } from "./path";
 import { Tree } from "./tree";
 
 export function createEntityFromObject(game: EntityList, obj: any) {
@@ -23,6 +25,12 @@ export function createEntityFromObject(game: EntityList, obj: any) {
             break;
         case "holdable":
             entity = new Holdable(game, obj.id);
+            break;
+        case "house":
+            entity = new House(game, obj.id);
+            break;
+        case "path":
+            entity = new Path(game, obj.id);
             break;
         default:
             console.error(`Unknown entity type: ${obj.type}`);

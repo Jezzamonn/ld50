@@ -6,6 +6,7 @@ import { EntityList } from "../entity-list";
 import { Cat } from "./cat";
 import { Entity } from "./entity";
 import { Holdable } from "./holdable";
+import { House } from "./house";
 import { Tree } from "./tree";
 
 const UP_KEYS = ["KeyW", "ArrowUp"];
@@ -46,7 +47,12 @@ export class Mouse extends Entity {
     }
 
     canCollideWith(other: Entity): boolean {
-        return other instanceof Cat || (other instanceof Holdable && other.isOnGround()) || other instanceof Tree;
+        return (
+            other instanceof Cat ||
+            (other instanceof Holdable && other.isOnGround()) ||
+            other instanceof Tree ||
+            other instanceof House
+        )
     }
 
     update(dt: number): void {

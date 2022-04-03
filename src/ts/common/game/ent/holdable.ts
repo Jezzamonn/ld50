@@ -4,6 +4,7 @@ import { choose } from "../../util";
 import { EntityList } from "../entity-list";
 import { Cat } from "./cat";
 import { Entity } from "./entity";
+import { House } from "./house";
 import { Tree } from "./tree";
 
 export const holdableTypes = ['grass', 'rock', 'wood', 'wool']
@@ -84,7 +85,7 @@ export class Holdable extends Entity {
     }
 
     canCollideWith(other: Entity): boolean {
-        return other instanceof Cat || other instanceof Tree;
+        return other instanceof Cat || other instanceof Tree || other instanceof House;
     }
 
     static loadImage() {

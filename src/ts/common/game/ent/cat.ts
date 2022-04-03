@@ -3,6 +3,7 @@ import { frameLength, physFromPx, physScale, pxFromPhys, spriteScale } from "../
 import { EntityList } from "../entity-list";
 import { Entity } from "./entity";
 import { Holdable } from "./holdable";
+import { House } from "./house";
 import { Mouse } from "./mouse";
 
 export class Cat extends Entity {
@@ -19,7 +20,7 @@ export class Cat extends Entity {
     }
 
     canCollideWith(other: Entity): boolean {
-        return other instanceof Holdable || other instanceof Mouse;
+        return other instanceof Holdable || other instanceof Mouse || other instanceof House;
     }
 
     update(dt: number): void {
@@ -76,6 +77,9 @@ export class Cat extends Entity {
             other.done = true;
             this.distractionCount = 5;
             this.game.toUpdate.push(other);
+        }
+        else if (other instanceof House) {
+            // TODO: LOSE!
         }
     }
 

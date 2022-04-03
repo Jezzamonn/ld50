@@ -1,6 +1,6 @@
-import { physFromPx, physScale, pxFromPhys, pxGameHeight, pxGameWidth } from "../../common/common";
+import { physFromPx, physFromSpritePx, physScale, pxFromPhys, pxGameHeight, pxGameWidth, pxWorldHeight, pxWorldWidth } from "../../common/common";
 import { RegularKeys } from "../../common/keys";
-import { choose, rgb } from "../../common/util";
+import { choose, lerp, rgb } from "../../common/util";
 import { Cat } from "../../common/game/ent/cat";
 import { Decor } from "../../common/game/ent/decor";
 import { Entity } from "../../common/game/ent/entity";
@@ -9,8 +9,8 @@ import { Mouse } from "../../common/game/ent/mouse";
 import { Tree } from "../../common/game/ent/tree";
 import { v4 as uuidv4 } from "uuid";
 import { createEntityFromObject } from "../../common/game/ent/entity-creator";
-
-const restartKeys = ["KeyR"];
+import { House } from "../../common/game/ent/house";
+import { Path } from "../../common/game/ent/path";
 
 export class ClientGame {
 
@@ -19,6 +19,7 @@ export class ClientGame {
 
     entities: Entity[] = [];
     toUpdate: Entity[] = [];
+    decorEntities: Entity[] = [];
     player!: Mouse;
 
     constructor(keys: RegularKeys, rng: () => number) {
@@ -30,7 +31,6 @@ export class ClientGame {
         this.createPlayer();
     }
 
-    // TODO: Move this to the server
     createPlayer() {
         let playerId = sessionStorage.getItem('kitastrophe-player-id');
         if (!playerId) {
@@ -39,10 +39,27 @@ export class ClientGame {
         }
 
         const mouse = new Mouse(this, playerId);
-        mouse.midX = physFromPx(pxGameWidth * Math.random());
-        mouse.minY = physFromPx(pxGameHeight * Math.random());
+        mouse.midX = physFromPx(lerp(0.4 * pxWorldWidth, 0.6 * pxWorldWidth, Math.random()));
+        mouse.minY = physFromPx(lerp(0.4 * pxWorldHeight, 0.6 * pxWorldHeight, Math.random()));
         this.entities.push(mouse);
         this.player = mouse;
+
+        // Client side decor!
+        // Add decor
+        for (let i = 0; i < 100; i++) {
+            const decor = new Decor(this, uuidv4());
+            decor.midX = physFromPx(Math.round(this.rng() * pxWorldWidth));
+            decor.maxY = physFromPx(Math.round(this.rng() * pxWorldHeight));
+            this.decorEntities.push(decor);
+        }
+
+        // Path too, what the heck.
+        for (let i = 0; i < 8; i++) {
+            const path = new Path(this, uuidv4());
+            path.midX = physFromPx(pxWorldWidth / 2);
+            path.maxY = physFromPx(pxWorldHeight - 200) - i * physFromSpritePx(75);
+            this.decorEntities.push(path);
+        }
     }
 
     update(dt: number) {
@@ -128,10 +145,12 @@ export class ClientGame {
             pxFromPhys(-this.player.midX) + pxGameWidth / 2,
             pxFromPhys(-this.player.midY) + pxGameHeight / 2);
 
-        // Sort the entities by y position
-        this.entities.sort((a, b) => a.maxY - b.maxY);
+        const allRenderables = [...this.entities, ...this.decorEntities];
 
-        for (const ent of this.entities) {
+        // Sort the entities by y position
+        allRenderables.sort((a, b) => a.maxY - b.maxY);
+
+        for (const ent of allRenderables) {
             ent.render(context);
         }
     }
@@ -150,5 +169,7 @@ export class ClientGame {
         Holdable.loadImage();
         Tree.loadImage();
         Decor.loadImage();
+        House.loadImage();
+        Path.loadImage();
     }
 }

@@ -21,7 +21,7 @@ function init() {
     Aseprite.disableSmoothing(context);
 
     const keys = new KeyboardKeys();
-    const rng = seededRandom("aaflafskjlasfdlasjwf");
+    const rng = seededRandom("qwrjafdskafsd;lkas;afek;");
 
     ClientGame.loadAllImages();
 

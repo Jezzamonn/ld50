@@ -1,4 +1,4 @@
-import { physFromPx, pxWorldHeight, pxWorldWidth } from "../common/common";
+import { physFromPx, physFromSpritePx, pxWorldHeight, pxWorldWidth } from "../common/common";
 import { Cat } from "../common/game/ent/cat";
 import { Decor } from "../common/game/ent/decor";
 import { Entity } from "../common/game/ent/entity";
@@ -9,6 +9,8 @@ import { EntityList } from "../common/game/entity-list";
 import { choose } from "../common/util";
 import { v4 as uuidv4 } from "uuid";
 import { createEntityFromObject } from "../common/game/ent/entity-creator";
+import { House } from "../common/game/ent/house";
+import { Path } from "../common/game/ent/path";
 
 export class ServerGame implements EntityList {
     rng: () => number;
@@ -75,12 +77,19 @@ export class ServerGame implements EntityList {
         // Don't create the player here.
 
         const cat = new Cat(this, uuidv4());
-        cat.midX = physFromPx(200);
-        cat.maxY = physFromPx(200);
+        cat.midX = physFromPx(pxWorldWidth / 2);
+        cat.maxY = physFromPx(0);
         this.entities.push(cat);
 
+        const house = new House(this, uuidv4());
+        house.midX = physFromPx(pxWorldWidth / 2);
+        house.maxY = physFromPx(pxWorldHeight);
+        this.entities.push(house);
+
+        // Path added on the client.
+
         // Add a bunch of holdable things.
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 20; i++) {
             const holdable = new Holdable(this, uuidv4());
             holdable.holdableType = choose(holdableTypes, this.rng);
             holdable.midX = physFromPx(Math.round(this.rng() * pxWorldWidth));
@@ -89,20 +98,20 @@ export class ServerGame implements EntityList {
         }
 
         // Add a bunch of trees
-        for (let i = 0; i < 20; i++) {
+        for (let i = 0; i < 40; i++) {
             const tree = new Tree(this, uuidv4());
             tree.midX = physFromPx(Math.round(this.rng() * pxWorldWidth));
             tree.maxY = physFromPx(Math.round(this.rng() * pxWorldHeight));
             this.entities.push(tree);
         }
 
-        // Add decor
-        for (let i = 0; i < 50; i++) {
-            const decor = new Decor(this, uuidv4());
-            decor.midX = physFromPx(Math.round(this.rng() * pxWorldWidth));
-            decor.maxY = physFromPx(Math.round(this.rng() * pxWorldHeight));
-            this.entities.push(decor);
-        }
+        // // Add decor
+        // for (let i = 0; i < 50; i++) {
+        //     const decor = new Decor(this, uuidv4());
+        //     decor.midX = physFromPx(Math.round(this.rng() * pxWorldWidth));
+        //     decor.maxY = physFromPx(Math.round(this.rng() * pxWorldHeight));
+        //     this.entities.push(decor);
+        // }
     }
 
 }
