@@ -141,8 +141,11 @@ class _Sounds {
     }
 
     updatePlaybackRate(desiredRate:number, dt: number) {
-        // Just update straight up
-        this.playbackRate = desiredRate;
+        if (desiredRate > this.playbackRate) {
+            this.playbackRate = desiredRate;
+        }
+        const updateAmt = 1 - Math.exp(-10 * dt);
+        this.playbackRate = lerp(this.playbackRate, desiredRate, updateAmt);
 
         if (this.curSong != null) {
             this.curSong.playbackRate = this.playbackRate;
