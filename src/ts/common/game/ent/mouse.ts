@@ -181,6 +181,7 @@ export class Mouse extends Entity {
                 this.holding = ent;
                 // The game will remove this entity
                 ent.done = true;
+                this.game.toUpdate.push(ent);
                 return true;
             }
         }
@@ -196,6 +197,7 @@ export class Mouse extends Entity {
         this.holding.dy = this.throwSpeed * this.facingDirection.y + 0.5 * this.dy;
         this.holding.dz = -this.throwZSpeed;
         this.game.entities.push(this.holding);
+        this.game.toUpdate.push(this.holding);
         this.holding = undefined;
     }
 

@@ -14,6 +14,8 @@ export class ServerGame implements EntityList {
     rng: () => number;
 
     entities: Entity[] = [];
+    // Unused?
+    toUpdate: Entity[] = [];
 
     constructor(rng: () => number) {
         this.rng = rng;
@@ -24,6 +26,13 @@ export class ServerGame implements EntityList {
     update(dt: number): void {
         for (const ent of this.entities) {
             ent.update(dt);
+        }
+        for (let i = this.entities.length - 1; i >= 0; i--) {
+            const ent = this.entities[i];
+            if (ent.done) {
+                this.entities.splice(i, 1);
+                console.log(`Done: ${ent.type} ${ent.id}`);
+            }
         }
     }
 
@@ -41,9 +50,8 @@ export class ServerGame implements EntityList {
             else {
                 const newEnt = createEntityFromObject(this, serverEntity);
                 if (newEnt) {
-                    newEnt.updateFromObject(serverEntity);
-
                     this.entities.push(newEnt);
+                    console.log(`New: ${newEnt.type} ${newEnt.id}`);
                 }
             }
         }

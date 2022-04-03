@@ -212,17 +212,19 @@ export class Entity {
             dx: this.dx,
             dy: this.dy,
             dz: this.dz,
+            done: this.done,
         };
     }
 
-    updateFromObject(obj: any) {
-        const lerpAmt = 0.3;
+    updateFromObject(obj: any, smooth = false) {
+        const lerpAmt = smooth ? 1 : 0.3;
         this.x = lerp(this.x, obj.x, lerpAmt);
         this.y = lerp(this.y, obj.y, lerpAmt);
         this.z = lerp(this.z, obj.z, lerpAmt);
         this.dx = obj.dx;
         this.dy = obj.dy;
         this.dz = obj.dz;
+        this.done = obj.done;
     }
 
     get minX(): number {

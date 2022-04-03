@@ -32,7 +32,7 @@ function init() {
     socket.on('connect', () => {
         console.log('Connected to server');
 
-        socket.emit('update', [game.player.toObject()]);
+        socket.emit('update', game.getServerUpdateData());
     });
 
     socket.on('update', (entities: any) => {
@@ -62,7 +62,7 @@ function handleFrame() {
 
     if (lastUpdatedMs === undefined || currentTimeMs - lastUpdatedMs > serverUpdatePeriodMs) {
         lastUpdatedMs = currentTimeMs;
-        socket.emit('update', [game.player.toObject()]);
+        socket.emit('update', game.getServerUpdateData());
     }
 
     game.render(context);

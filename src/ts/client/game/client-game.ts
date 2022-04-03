@@ -18,6 +18,7 @@ export class ClientGame {
     rng: () => number;
 
     entities: Entity[] = [];
+    toUpdate: Entity[] = [];
     player!: Mouse;
 
     constructor(keys: RegularKeys, rng: () => number) {
@@ -50,6 +51,7 @@ export class ClientGame {
             const ent = this.entities[i];
             if (ent.done) {
                 this.entities.splice(i, 1);
+                console.log(`Done: ${ent.type} ${ent.id}`);
             }
         }
 
@@ -63,6 +65,10 @@ export class ClientGame {
         this.player.handleInput(this.keys, dt);
     }
 
+    entityIsQueuedForUpdate(id: string) {
+        return this.toUpdate.some(e => e.id === id);
+    }
+
     updateEntitiesFromServer(serverEntities: any) {
         const encounteredIds = new Set<string>();
         for (const serverEntity of serverEntities) {
@@ -70,10 +76,14 @@ export class ClientGame {
             if (serverEntity.id === this.player.id) {
                 continue;
             }
+            // Also could be more efficient
+            if (this.entityIsQueuedForUpdate(serverEntity.id)) {
+                continue;
+            }
             // TODO: This could be more efficient.
             const existing = this.entities.find(e => e.id === serverEntity.id);
             if (existing) {
-                existing.updateFromObject(serverEntity);
+                existing.updateFromObject(serverEntity, true);
             }
             else {
                 const newEnt = createEntityFromObject(this, serverEntity);
@@ -87,10 +97,23 @@ export class ClientGame {
             if (ent === this.player) {
                 continue;
             }
+            // Also could be more efficient
+            if (this.entityIsQueuedForUpdate(ent.id)) {
+                continue;
+            }
             if (!encounteredIds.has(ent.id)) {
                 ent.done = true;
             }
         }
+    }
+
+    getServerUpdateData() {
+        const data = [
+            this.player.toObject(),
+            ...this.toUpdate.map(e => e.toObject()),
+        ];
+        this.toUpdate = [];
+        return data;
     }
 
     render(context: CanvasRenderingContext2D) {
