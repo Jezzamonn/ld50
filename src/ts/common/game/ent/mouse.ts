@@ -22,7 +22,7 @@ export class Mouse extends Entity {
 
     zHeight = physFromPx(30);
 
-    holding?: Entity;
+    holding?: Holdable;
 
     facingDirection: Point = { x: 1, y: 0 };
 
@@ -193,6 +193,7 @@ export class Mouse extends Entity {
             return;
         }
         this.holding.done = false;
+        this.holding.thrown = true;
         this.holding.dx = this.throwSpeed * this.facingDirection.x + 0.5 * this.dx;
         this.holding.dy = this.throwSpeed * this.facingDirection.y + 0.5 * this.dy;
         this.holding.dz = -this.throwZSpeed;

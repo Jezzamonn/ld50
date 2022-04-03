@@ -16,6 +16,7 @@ const spawnZSpeed = physFromPx(1 / frameLength);
 export class Holdable extends Entity {
 
     holdableType: string;
+    thrown = false;
 
     constructor(game: EntityList, id: string) {
         super(game, id);
@@ -93,6 +94,9 @@ export class Holdable extends Entity {
     }
 
     onEntityCollision(other: Entity): void {
+        if (!this.thrown) {
+            return;
+        }
         // Kill trees
         if (this.holdableType === 'rock' && other instanceof Tree) {
             // Kills trees. Lol.
@@ -130,12 +134,14 @@ export class Holdable extends Entity {
     toObject() {
         return Object.assign(super.toObject(), {
             holdableType: this.holdableType,
+            thrown: this.thrown,
         });
     }
 
     updateFromObject(obj: any, smooth: boolean = false) {
         super.updateFromObject(obj, smooth);
         this.holdableType = obj.holdableType;
+        this.thrown = obj.thrown;
     }
 
     canCollideWith(other: Entity): boolean {
