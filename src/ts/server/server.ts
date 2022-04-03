@@ -7,9 +7,9 @@ import { ServerGame } from './server-game';
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
-    // Allow local host CORS stuff
+    // Allow all CORS stuff
     cors: {
-        origin: "http://localhost:8080",
+        origin: "*",
         methods: ["GET", "POST"]
     }
 });

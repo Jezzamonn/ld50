@@ -11,6 +11,7 @@
     "music": "mkdir -p build/client/music && rsync --delete -a --include='*.mp3' --exclude='*/' --exclude='*' music/ build/client/music/",
     "sfx": "mkdir -p build/client/sfx && rsync --delete -a --include='*.mp3' --exclude='*/' --exclude='*' sfx/ build/client/sfx/",
     "webpack": "webpack",
+    "webpack-prod": "webpack --mode production",
     "build": "npm-run-all --parallel webpack sass static sprites music",
     "server": "node build/server/server.bundle.js",
     "watch-server": "nodemon build/server/server.bundle.js",
