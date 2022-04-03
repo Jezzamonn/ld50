@@ -141,9 +141,18 @@ export class ClientGame {
 
         this.renderBg(context);
 
-        context.translate(
-            pxFromPhys(-this.player.midX) + pxGameWidth / 2,
-            pxFromPhys(-this.player.midY) + pxGameHeight / 2);
+        if (this.player.done) {
+            const cat = this.entities.find(e => e.type === 'cat');
+            if (cat) {
+                this.centerCameraOn(context, cat);
+            }
+            else {
+                this.centerCameraOn(context, this.player);
+            }
+        }
+        else {
+            this.centerCameraOn(context, this.player);
+        }
 
         const allRenderables = [...this.entities, ...this.decorEntities];
 
@@ -153,6 +162,12 @@ export class ClientGame {
         for (const ent of allRenderables) {
             ent.render(context);
         }
+    }
+
+    centerCameraOn(context: CanvasRenderingContext2D, entity: Entity) {
+        context.translate(
+            pxFromPhys(-entity.midX) + pxGameWidth / 2,
+            pxFromPhys(-entity.midY) + pxGameHeight / 2);
     }
 
     renderBg(context: CanvasRenderingContext2D) {
