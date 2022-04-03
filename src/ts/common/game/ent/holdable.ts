@@ -7,6 +7,7 @@ import { Entity } from "./entity";
 import { House } from "./house";
 import { Tree } from "./tree";
 import { v4 as uuidv4 } from "uuid";
+import { Sounds } from "../../sounds";
 
 export const holdableTypes = ['grass', 'rock', 'wood', 'wool'];
 
@@ -121,6 +122,11 @@ export class Holdable extends Entity {
                     this.game.entities.push(holdable);
                 }
             }
+
+            // play sound on the client??
+            if (!this.game.isServer) {
+                Sounds.playSound('explode', { volume: 0.3 });
+            }
         }
         // Grass becomes a new tree if it hits a tree
         if (this.holdableType === 'grass' && other instanceof Tree) {
@@ -155,6 +161,14 @@ export class Holdable extends Entity {
 
     canCollideWith(other: Entity): boolean {
         return other instanceof Cat || other instanceof Tree || other instanceof House;
+    }
+
+    land(): void {
+        super.land();
+        // dz is negative after bouncing.
+        if (!this.game.isServer && this.dz < -10 / frameLength) {
+            Sounds.playSound('walk', { volume: 0.3 });
+        }
     }
 
     static loadImage() {

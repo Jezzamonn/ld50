@@ -38,7 +38,6 @@ class _Sounds {
             this.audios[name] = {
                 loaded: false,
                 audio: undefined,
-                loadPromise: promise,
             };
 
             const audio = new Audio();
@@ -52,6 +51,7 @@ class _Sounds {
             }
             audio.src = audioPath;
         });
+        this.audios[name].loadPromise = promise;
         return promise;
     }
 
@@ -60,7 +60,9 @@ class _Sounds {
             return;
         }
 
-        const audio = (this.audios[name].audio?.cloneNode() as HTMLAudioElement);
+        console.log(`Playing sound ${name}, audios = ${Object.keys(this.audios)}`);
+
+        const audio = ((this.audios[name])?.audio?.cloneNode() as HTMLAudioElement);
         if (audio == null) {
             return;
         }
@@ -84,6 +86,7 @@ class _Sounds {
 
     /** We still run the logic here when muted, so that we can update things when unmuted. */
     async setSong(songName: string) {
+        console.log(`Setting song to ${songName}`);
         if (this.curSongName == songName) {
             return;
         }
@@ -106,6 +109,7 @@ class _Sounds {
 
         const audio = (audioInfo.audio?.cloneNode() as HTMLAudioElement);
         if (audio == null) {
+            console.error(`Failed to clone audio for ${songName}`);
             return;
         }
 
@@ -178,6 +182,7 @@ class _Sounds {
                 this.muteState = MuteState.PLAY_ALL;
                 break;
         }
+        console.log(`Mute state is now ${this.muteState}`);
         window.sessionStorage.setItem('mute', this.muteState.toString());
         this.updateSoundMutedness();
     }

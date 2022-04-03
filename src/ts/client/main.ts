@@ -3,6 +3,7 @@ import { KeyboardKeys, RegularKeys } from "../common/keys";
 import { seededRandom } from "../common/util";
 import { ClientGame } from "./game/client-game";
 import { io, Socket } from 'socket.io-client';
+import { Sounds } from "../common/sounds";
 
 let canvas: HTMLCanvasElement;
 let context: CanvasRenderingContext2D;
@@ -28,6 +29,9 @@ function init() {
     rng = seededRandom("qwrjafdskafsd;lkas;afek;");
 
     ClientGame.loadAllImages();
+    ClientGame.loadAllSounds();
+
+    Sounds.loadMuteState();
 
     game = new ClientGame(keys, rng);
     game.resetFn = () => reset();
@@ -49,10 +53,13 @@ function init() {
         console.log('Resetting game');
         game = new ClientGame(keys, rng);
         game.resetFn = () => reset();
-    })
 
+        Sounds.playSound('restart');
+    });
 
     handleFrame();
+
+    Sounds.setSong('main');
 }
 
 function reset() {

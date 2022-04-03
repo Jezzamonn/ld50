@@ -126,10 +126,14 @@ export class Entity {
         this.dz += this.gravity * dt;
         this.z += this.dz * dt;
         if (this.z > 0) {
-            this.z = 0;
-            // Bounce!
-            this.dz = -0.2 * this.dz;
+            this.land();
         }
+    }
+
+    land() {
+        this.z = 0;
+        // Bounce!
+        this.dz = -0.2 * this.dz;
     }
 
     dampX(dt: number): void {

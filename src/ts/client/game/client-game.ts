@@ -1,4 +1,4 @@
-import { ACTION_KEYS, physFromPx, physFromSpritePx, physScale, pxFromPhys, pxGameHeight, pxGameWidth, pxWorldHeight, pxWorldWidth } from "../../common/common";
+import { ACTION_KEYS, MUTE_KEYS, physFromPx, physFromSpritePx, physScale, pxFromPhys, pxGameHeight, pxGameWidth, pxWorldHeight, pxWorldWidth } from "../../common/common";
 import { RegularKeys } from "../../common/keys";
 import { choose, lerp, rgb } from "../../common/util";
 import { Cat } from "../../common/game/ent/cat";
@@ -11,6 +11,7 @@ import { v4 as uuidv4 } from "uuid";
 import { createEntityFromObject } from "../../common/game/ent/entity-creator";
 import { House } from "../../common/game/ent/house";
 import { Path } from "../../common/game/ent/path";
+import { Sounds } from "../../common/sounds";
 
 export class ClientGame {
 
@@ -103,6 +104,11 @@ export class ClientGame {
                 this.resetFn();
             }
         }
+
+        if (this.keys.anyWasPressedThisFrame(MUTE_KEYS)) {
+            Sounds.toggleMute();
+        }
+
         this.player.handleInput(this.keys, dt);
     }
 
@@ -212,5 +218,16 @@ export class ClientGame {
         Decor.loadImage();
         House.loadImage();
         Path.loadImage();
+    }
+
+    static loadAllSounds() {
+        Sounds.loadSound({name: 'explode', path: 'sfx/'});
+        Sounds.loadSound({name: 'gameover', path: 'sfx/'});
+        Sounds.loadSound({name: 'meow', path: 'sfx/'});
+        Sounds.loadSound({name: 'restart', path: 'sfx/'});
+        Sounds.loadSound({name: 'walk', path: 'sfx/'});
+
+        // For reference, this song is 92.3076923077 seconds long.
+        Sounds.loadSound({name: 'main', path: 'music/'});
     }
 }

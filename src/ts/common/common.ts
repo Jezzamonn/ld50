@@ -20,6 +20,7 @@ export const DOWN_KEYS = ["KeyS", "ArrowDown"];
 export const LEFT_KEYS = ["KeyA", "ArrowLeft"];
 export const RIGHT_KEYS = ["KeyD", "ArrowRight"];
 export const ACTION_KEYS = ["Space"];
+export const MUTE_KEYS = ["KeyM"];
 
 export function physFromPx(px: number): number {
     return px * physScale;

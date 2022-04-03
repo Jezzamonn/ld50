@@ -1,5 +1,6 @@
 import { Aseprite } from "../../aseprite-js";
 import { frameLength, physFromPx, physScale, pxFromPhys, spriteScale } from "../../common";
+import { Sounds } from "../../sounds";
 import { EntityList } from "../entity-list";
 import { Entity } from "./entity";
 import { Holdable } from "./holdable";
@@ -72,16 +73,27 @@ export class Cat extends Entity {
         if (other instanceof Holdable) {
             other.done = true;
             this.distractionCount = other.distractionLength;
+
+            if (!this.game.isServer) {
+                Sounds.playSound('meow');
+            }
         }
         else if (other instanceof Mouse) {
             other.done = true;
             this.distractionCount = 10;
             this.game.toUpdate.push(other);
+
+            if (!this.game.isServer) {
+                Sounds.playSound('gameover');
+            }
         }
         else if (other instanceof House) {
             this.distractionCount = 1;
             if (!this.game.gameOver) {
                 console.log('Game over!');
+                if (!this.game.isServer) {
+                    Sounds.playSound('gameover');
+                }
             }
             this.game.gameOver = true;
         }
