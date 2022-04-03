@@ -136,6 +136,11 @@ export class Holdable extends Entity {
             tree.x = this.x;
             tree.y = this.y;
             this.game.entities.push(tree);
+
+            // Trees make explosions sounds when they grow, right?
+            if (!this.game.isServer) {
+                Sounds.playSound('explode', { volume: 0.3 });
+            }
         }
         // Wood becomes a fish if it hits a house
         if (this.holdableType === 'wood' && other instanceof House) {
@@ -143,6 +148,10 @@ export class Holdable extends Entity {
             // bounce back
             this.dx = -0.5 * this.dx;
             this.dy = -0.5 * this.dy;
+
+            if (!this.game.isServer) {
+                Sounds.playSound('walk', { volume: 0.5 });
+            }
         }
     }
 
