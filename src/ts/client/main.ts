@@ -44,21 +44,39 @@ function init() {
             Sounds.toggleMute();
         }
 
-        if (gameState === 'title') {
-            if (ACTION_KEYS.includes(evt.code)) {
-                hideTitle();
+        if (ACTION_KEYS.includes(evt.code)) {
+            if (gameState === 'title') {
+                showInstructions();
+            }
+            else if (gameState === 'instructions') {
+                showInstructions2();
+            }
+            else if (gameState === 'instructions2') {
                 startGame();
             }
         }
     });
 }
 
-function hideTitle() {
-    document.querySelector('.title')!.classList.add('hidden');
+function updateWhichElementsAreVisible() {
+    document.querySelector('.canvas')!.classList.toggle('hidden', gameState !== 'game');
+    document.querySelector('.title')!.classList.toggle('hidden', gameState !== 'title');
+    document.querySelector('.instructions')!.classList.toggle('hidden', gameState !== 'instructions');
+    document.querySelector('.instructions2')!.classList.toggle('hidden', gameState !== 'instructions2');
+}
+
+function showInstructions() {
+    gameState = 'instructions';
+    updateWhichElementsAreVisible();
+}
+function showInstructions2() {
+    gameState = 'instructions2';
+    updateWhichElementsAreVisible();
 }
 
 function startGame() {
     gameState = 'game';
+    updateWhichElementsAreVisible();
 
     game = new ClientGame(keys, rng);
     game.resetFn = () => reset();

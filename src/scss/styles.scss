@@ -8,6 +8,12 @@ html, body {
 
 p {
     font-size: 32px;
+    margin-block-start: 15px;
+    margin-block-end: 15px;
+}
+
+li {
+    font-size: 32px;
 }
 
 h2 {
@@ -32,9 +38,16 @@ h2 {
     height: 600px;
 }
 
-.title-image {
+.title-bg {
     position: absolute;
     z-index: -1;
+}
+.title-text {
+    position: absolute;
+}
+
+.instructions-text {
+    max-width: 90%;
 }
 
 .centered-text {

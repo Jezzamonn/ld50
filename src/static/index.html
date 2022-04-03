@@ -18,11 +18,38 @@
 </head>
 <body>
 	<div class="content">
-		<canvas id="canvas" class="canvas screen" width="800" height="600"></canvas>
+		<canvas id="canvas" class="canvas screen hidden" width="800" height="600"></canvas>
 		<div class="title screen">
-			<img class="title-image" src="sprites/title.png" alt="Kitastrophe">
+			<img class="title-bg" src="sprites/title-bg.png" alt="Kitastrophe">
+			<img class="title-text" src="sprites/title-text.png" alt="Kitastrophe">
 			<h2 class="centered-text" style="margin-top: 450px;">Press Space to Start!</h2>
-			<p class="centered-text" style="margin-top: 40px">A game for Ludum Dare 50 "Delay the inevitable" by <a href="https://twitter.com/jezzamonn">Jezzamon</a></a></p>
+			<p class="centered-text" style="margin-top: 40px">A game for Ludum Dare 50 "Delay the inevitable" by <a href="https://twitter.com/jezzamonn">Jezzamon</a></p>
+		</div>
+		<div class="instructions screen hidden">
+			<img class="title-bg" src="sprites/instruction-bg.png" alt="Kitastrophe">
+			<section class="instructions-text">
+				<h2 class="centered-text" style="margin-top: 200px;">What's going on:</h2>
+				<p>A kitten has noticed our peaceful mouse village! We must try to distract it as long as possible!</p>
+				<p>Controls:</p>
+				<ul>
+					<li>WASD / Arrow Keys to move</li>
+					<li>Space to Dash</li>
+					<li>Space near an object to pick it up</li>
+					<li>Space while holding an object to throw it</li>
+				</ul>
+				<p>Bring stuff to the kitten to delay its inevitable destruction!</p>
+				<p>Throwing certain objects at other things might have useful results!</p>
+				<h2 class="centered-text">Next...</p>
+			</section>
+		</div>
+		<div class="instructions2 screen hidden">
+			<img class="title-bg" src="sprites/instruction-bg.png" alt="Kitastrophe">
+			<section class="instructions-text">
+				<h2 class="centered-text" style="margin-top: 200px;">What's going on:</h2>
+				<p>This is also online multiplayer game! You're working with everyone else that's currently playing the game to last as long as possible! Invite some friends to try to get a high score together!</p>
+				<p>If you lose, press space to restart (when you start, the game will probably be in a losing state from the last person that played it)</p>
+				<h2 class="centered-text">Space to start!</p>
+			</section>
 		</div>
 	</div>
 	<script src="js/main.bundle.js"></script>
