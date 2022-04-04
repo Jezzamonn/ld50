@@ -30,6 +30,8 @@ export class Mouse extends Entity {
     isMoving = false;
     flipped = false;
 
+    holdingType = '';
+
     constructor(game: EntityList, id: string) {
         super(game, id);
 
@@ -88,7 +90,23 @@ export class Mouse extends Entity {
             flippedX: this.flipped,
         });
 
-        this.holding?.render(context);
+        if (this.holdingType !== '') {
+            Aseprite.drawAnimation({
+                context,
+                image: 'holdable',
+                animationName: this.holdingType,
+                time: this.animCount,
+                position: {
+                    x: pxFromPhys(this.midX),
+                    y: pxFromPhys(this.maxY - this.zHeight),
+                },
+                anchorRatios: {
+                    x: 0.5,
+                    y: 1,
+                },
+                scale: spriteScale,
+            });
+        }
     }
 
     getAnimationName() {
@@ -181,6 +199,7 @@ export class Mouse extends Entity {
             }
             if (this.isTouching(ent, this.width / 2)) {
                 this.holding = ent;
+                this.holdingType = ent.holdableType;
                 // The game will remove this entity
                 ent.done = true;
                 this.game.toUpdate.push(ent);
@@ -202,6 +221,7 @@ export class Mouse extends Entity {
         this.game.entities.push(this.holding);
         this.game.toUpdate.push(this.holding);
         this.holding = undefined;
+        this.holdingType = '';
     }
 
     roll() {
@@ -221,6 +241,7 @@ export class Mouse extends Entity {
             isMoving: this.isMoving,
             flipped: this.flipped,
             rollCount: this.rollCount,
+            holdingType: this.holdingType,
         });
     }
 
@@ -229,6 +250,7 @@ export class Mouse extends Entity {
         this.isMoving = obj.isMoving;
         this.flipped = obj.flipped;
         this.rollCount = obj.rollCount;
+        this.holdingType = obj.holdingType;
     }
 
     static loadImage() {

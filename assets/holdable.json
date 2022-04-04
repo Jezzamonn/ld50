@@ -88,6 +88,15 @@
     "spriteSourceSize": { "x": 0, "y": 0, "w": 30, "h": 30 },
     "sourceSize": { "w": 30, "h": 30 },
     "duration": 100
+   },
+   {
+    "filename": "holdable 10.aseprite",
+    "frame": { "x": 151, "y": 1, "w": 30, "h": 30 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 30, "h": 30 },
+    "sourceSize": { "w": 30, "h": 30 },
+    "duration": 100
    }
  ],
  "meta": {
@@ -95,7 +104,7 @@
   "version": "1.2.33-x64",
   "image": "holdable.png",
   "format": "RGBA8888",
-  "size": { "w": 152, "h": 66 },
+  "size": { "w": 182, "h": 66 },
   "scale": "1",
   "frameTags": [
    { "name": "grass", "from": 0, "to": 0, "direction": "forward" },
@@ -107,7 +116,7 @@
    { "name": "painted-fish", "from": 6, "to": 6, "direction": "forward" },
    { "name": "house", "from": 7, "to": 7, "direction": "forward" },
    { "name": "cat", "from": 8, "to": 8, "direction": "forward" },
-   { "name": "shadow", "from": 9, "to": 9, "direction": "forward" }
+   { "name": "shadow", "from": 10, "to": 10, "direction": "forward" }
   ]
  }
 }
