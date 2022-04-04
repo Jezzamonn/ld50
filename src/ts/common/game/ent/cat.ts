@@ -12,6 +12,7 @@ export class Cat extends Entity {
 
     moveSpeed = physFromPx(0.6 / frameLength);
     distractionCount = 0;
+    atHouse = false;
 
     constructor(game: EntityList, id: string) {
         super(game, id);
@@ -22,7 +23,11 @@ export class Cat extends Entity {
     }
 
     canCollideWith(other: Entity): boolean {
-        return other instanceof Holdable || other instanceof Mouse || other instanceof House;
+        return (
+            other.type === 'holdable' ||
+            other.type === 'mouse' ||
+            other.type === 'house'
+        );
     }
 
     update(dt: number): void {
@@ -71,6 +76,10 @@ export class Cat extends Entity {
     }
 
     onEntityCollision(other: Entity): void {
+        // ?
+        if (!this.game.isServer) {
+            return;
+        }
         if (other instanceof Holdable) {
             other.done = true;
             this.distractionCount = other.distractionLength;
@@ -92,7 +101,11 @@ export class Cat extends Entity {
             }
         }
         else if (other instanceof House) {
+            this.atHouse = true;
             this.distractionCount = 1;
+        }
+
+        if (this.atHouse) {
             if (!this.game.gameOver) {
                 console.log('Game over!');
                 if (!this.game.isServer) {
@@ -106,12 +119,14 @@ export class Cat extends Entity {
     toObject() {
         return Object.assign(super.toObject(), {
             distractionCount: this.distractionCount,
+            atHouse: this.atHouse,
         });
     }
 
     updateFromObject(obj: any, smooth?: boolean): void {
         super.updateFromObject(obj, smooth);
         this.distractionCount = obj.distractionCount;
+        this.atHouse = obj.atHouse;
     }
 
     static loadImage() {

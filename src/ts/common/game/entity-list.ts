@@ -12,4 +12,6 @@ export interface EntityList {
     gameOver: boolean;
 
     isServer: boolean;
+
+    rng: () => number;
 }

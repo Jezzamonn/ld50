@@ -12,6 +12,7 @@ import { createEntityFromObject } from "../common/game/ent/entity-creator";
 import { House } from "../common/game/ent/house";
 import { Path } from "../common/game/ent/path";
 import { Timer } from "../common/game/ent/timer";
+import { Mon } from "../common/game/ent/mon";
 
 export class ServerGame implements EntityList {
     rng: () => number;
@@ -41,14 +42,13 @@ export class ServerGame implements EntityList {
             }
         }
 
-        // if (this.rng() < 0.01) {
-        //     // Add a new thingo?
-        //     const newEnt = new Holdable(this, uuidv4());
-        //     newEnt.holdableType = choose(holdableTypes, this.rng);
-        //     newEnt.midX = physFromPx(Math.round(this.rng() * pxWorldWidth));
-        //     newEnt.maxY = physFromPx(Math.round(this.rng() * pxWorldHeight));
-        //     this.entities.push(newEnt);
-        // }
+        const numMons = this.entities.filter(e => e.type === "mon").length;
+        if (numMons < 1) {
+            if (this.rng() < 0.001) {
+                // Add a new thingo?
+                this.newMon();
+            }
+        }
     }
 
     getScore() {
@@ -133,6 +133,11 @@ export class ServerGame implements EntityList {
             this.entities.push(tree);
         }
 
+        // 1 mon (for now)
+        for (let i = 0; i < 1; i++) {
+            this.newMon();
+        }
+
         // // Add decor
         // for (let i = 0; i < 50; i++) {
         //     const decor = new Decor(this, uuidv4());
@@ -140,6 +145,13 @@ export class ServerGame implements EntityList {
         //     decor.maxY = physFromPx(Math.round(this.rng() * pxWorldHeight));
         //     this.entities.push(decor);
         // }
+    }
+
+    newMon() {
+        const mon = new Mon(this, uuidv4());
+        mon.midX = this.getRandomXNotOnPath();
+        mon.maxY = physFromPx(Math.round(this.rng() * pxWorldHeight));
+        this.entities.push(mon);
     }
 
     getRandomXNotOnPath() {

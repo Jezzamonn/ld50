@@ -8,6 +8,7 @@ import { House } from "./house";
 import { Tree } from "./tree";
 import { v4 as uuidv4 } from "uuid";
 import { Sounds } from "../../sounds";
+import { Mon } from "./mon";
 
 export const holdableTypes = ['grass', 'rock', 'wood', 'wool'];
 
@@ -29,6 +30,15 @@ export class Holdable extends Entity {
         this.dampAcceleration = physFromPx(50 / frameLength);
     }
 
+    canCollideWith(other: Entity): boolean {
+        return (
+            other.type === 'cat' ||
+            other.type === 'tree' ||
+            other.type === 'house' ||
+            other.type === 'mon'
+        );
+    }
+
     get distractionLength() {
         switch (this.holdableType) {
             case 'grass':
@@ -39,6 +49,8 @@ export class Holdable extends Entity {
                 return 3;
             case 'wool':
                 return 30;
+            case 'small-wool':
+                return 20;
             case 'fish':
                 return 20;
             default:
@@ -97,6 +109,8 @@ export class Holdable extends Entity {
     }
 
     onEntityCollision(other: Entity): void {
+        let bounce = false;
+
         if (!this.thrown) {
             return;
         }
@@ -146,12 +160,49 @@ export class Holdable extends Entity {
         if (this.holdableType === 'wood' && other instanceof House) {
             this.holdableType = 'fish';
             // bounce back
-            this.dx = -0.5 * this.dx;
-            this.dy = -0.5 * this.dy;
+            bounce = true;
 
             if (!this.game.isServer) {
                 Sounds.playSound('walk', { volume: 0.5 });
             }
+        }
+
+        // Wool becomes a small wool if it hits a mon
+        if (this.holdableType === 'wool' && other instanceof Mon) {
+            if (this.game.isServer) {
+
+                console.log('make wool?');
+
+                other.woolCount--;
+
+                const holdable = new Holdable(this.game, uuidv4());
+                holdable.holdableType = 'small-wool';
+                holdable.midX = other.midX;
+                holdable.maxY = other.maxY;
+                holdable.dx = 0.5 * -this.dx;
+                holdable.dy = 0.5 * -this.dy;
+                holdable.dz = -spawnZSpeed;
+                this.game.entities.push(holdable);
+
+                if (other.woolCount === 0) {
+                    other.done = true;
+                }
+            }
+
+            if (!this.game.isServer) {
+                Sounds.playSound('walk', { volume: 0.5 });
+            }
+        }
+
+
+
+        if (bounce) {
+            this.dx = -0.5 * this.dx;
+            this.dy = -0.5 * this.dy;
+        }
+        else {
+            this.dx = 0;
+            this.dy = 0;
         }
     }
 
@@ -166,10 +217,6 @@ export class Holdable extends Entity {
         super.updateFromObject(obj, smooth);
         this.holdableType = obj.holdableType;
         this.thrown = obj.thrown;
-    }
-
-    canCollideWith(other: Entity): boolean {
-        return other instanceof Cat || other instanceof Tree || other instanceof House;
     }
 
     land(): void {

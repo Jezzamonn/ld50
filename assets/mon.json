@@ -1,0 +1,42 @@
+{ "frames": [
+   {
+    "filename": "mon 0.aseprite",
+    "frame": { "x": 1, "y": 1, "w": 20, "h": 14 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 20, "h": 14 },
+    "sourceSize": { "w": 20, "h": 14 },
+    "duration": 100
+   },
+   {
+    "filename": "mon 1.aseprite",
+    "frame": { "x": 1, "y": 15, "w": 20, "h": 14 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 20, "h": 14 },
+    "sourceSize": { "w": 20, "h": 14 },
+    "duration": 100
+   },
+   {
+    "filename": "mon 2.aseprite",
+    "frame": { "x": 1, "y": 29, "w": 20, "h": 14 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 20, "h": 14 },
+    "sourceSize": { "w": 20, "h": 14 },
+    "duration": 100
+   }
+ ],
+ "meta": {
+  "app": "https://www.aseprite.org/",
+  "version": "1.2.33-x64",
+  "image": "mon.png",
+  "format": "RGBA8888",
+  "size": { "w": 22, "h": 66 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "idle", "from": 0, "to": 0, "direction": "forward" },
+   { "name": "run", "from": 1, "to": 2, "direction": "forward" }
+  ]
+ }
+}

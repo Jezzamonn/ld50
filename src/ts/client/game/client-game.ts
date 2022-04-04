@@ -13,6 +13,7 @@ import { House } from "../../common/game/ent/house";
 import { Path } from "../../common/game/ent/path";
 import { Sounds } from "../../common/sounds";
 import { DistractionUpdater } from "../../common/game/ent/distraction-updater";
+import { Mon } from "../../common/game/ent/mon";
 
 export class ClientGame {
 
@@ -263,6 +264,7 @@ export class ClientGame {
         Decor.loadImage();
         House.loadImage();
         Path.loadImage();
+        Mon.loadImage();
     }
 
     static loadAllSounds() {

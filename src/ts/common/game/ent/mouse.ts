@@ -43,10 +43,11 @@ export class Mouse extends Entity {
 
     canCollideWith(other: Entity): boolean {
         return (
-            other instanceof Cat ||
-            (other instanceof Holdable && other.isOnGround()) ||
-            other instanceof Tree ||
-            other instanceof House
+            other.type === 'cat' ||
+            (other.type === 'holdable' && other.isOnGround()) ||
+            other.type === 'tree' ||
+            other.type === 'house' ||
+            other.type === 'mon'
         )
     }
 
