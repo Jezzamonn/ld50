@@ -76,10 +76,6 @@ export class Cat extends Entity {
     }
 
     onEntityCollision(other: Entity): void {
-        // ?
-        if (!this.game.isServer) {
-            return;
-        }
         if (other instanceof Holdable) {
             other.done = true;
             this.distractionCount = other.distractionLength;
@@ -126,7 +122,7 @@ export class Cat extends Entity {
     updateFromObject(obj: any, smooth?: boolean): void {
         super.updateFromObject(obj, smooth);
         this.distractionCount = obj.distractionCount;
-        this.atHouse = obj.atHouse;
+        this.atHouse ||= obj.atHouse;
     }
 
     static loadImage() {

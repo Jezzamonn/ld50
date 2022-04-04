@@ -46,6 +46,8 @@ export class DistractionUpdater extends Entity {
             return 0;
         }
 
+        const topHouseY = this.game.entities.filter(e => e.type === 'house').map(e => e.minY).reduce((a, b) => Math.min(a, b), Number.MAX_VALUE);
+
         for (const entity of clientGame.entities) {
             if (entity.type !== 'holdable') {
                 continue;
@@ -54,6 +56,9 @@ export class DistractionUpdater extends Entity {
 
             // Only count ones in front of the cat
             if (entity.midY < cat.midY) {
+                continue;
+            }
+            if (entity.maxY > topHouseY) {
                 continue;
             }
             if (entity.maxX < cat.minX || entity.minX > cat.maxX) {

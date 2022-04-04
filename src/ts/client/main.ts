@@ -78,6 +78,8 @@ function startGame() {
     gameState = 'game';
     updateWhichElementsAreVisible();
 
+    keys.resetFrame();
+
     game = new ClientGame(keys, rng);
     game.resetFn = () => reset();
 

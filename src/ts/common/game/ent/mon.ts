@@ -63,7 +63,15 @@ export class Mon extends Entity {
             }
         }
         if (this.game.isServer) {
-            if (!this.walkTarget || this.game.rng() < 0.01) {
+            if (!this.walkTarget) {
+                if (this.game.rng() < 0.05) {
+                    this.walkTarget = {
+                        x: this.midX + lerp(-maxWalkDist, maxWalkDist, this.game.rng()),
+                        y: this.midY + lerp(-maxWalkDist, maxWalkDist, this.game.rng()),
+                    };
+                }
+            }
+            else if (this.game.rng() < 0.01) {
                 this.walkTarget = {
                     x: this.midX + lerp(-maxWalkDist, maxWalkDist, this.game.rng()),
                     y: this.midY + lerp(-maxWalkDist, maxWalkDist, this.game.rng()),

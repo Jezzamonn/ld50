@@ -125,6 +125,24 @@ export class ServerGame implements EntityList {
             this.entities.push(holdable);
         }
 
+        // Secret holdable one
+        {
+            const holdable = new Holdable(this, uuidv4());
+            holdable.holdableType = 'cat';
+            holdable.midX = physFromPx(pxWorldWidth / 2);
+            holdable.maxY = physFromPx(-pxWorldHeight);
+            this.entities.push(holdable);
+        }
+
+        // Secret small house
+        {
+            const holdable = new Holdable(this, uuidv4());
+            holdable.holdableType = 'house';
+            holdable.midX = physFromPx(pxWorldWidth / 2);
+            holdable.maxY = physFromPx(2 * pxWorldHeight);
+            this.entities.push(holdable);
+        }
+
         // Add a bunch of trees
         for (let i = 0; i < 40; i++) {
             const tree = new Tree(this, uuidv4());

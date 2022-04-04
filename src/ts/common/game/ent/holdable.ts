@@ -53,6 +53,11 @@ export class Holdable extends Entity {
                 return 20;
             case 'fish':
                 return 20;
+            case 'painted-fish':
+                return 25;
+            case 'cat':
+            case 'house':
+                return 60;
             default:
                 return 0;
         }
@@ -143,7 +148,7 @@ export class Holdable extends Entity {
             }
         }
         // Grass becomes a new tree if it hits a tree
-        if (this.holdableType === 'grass' && other instanceof Tree) {
+        else if (this.holdableType === 'grass' && other instanceof Tree) {
             this.done = true;
 
             const tree = new Tree(this.game, uuidv4());
@@ -157,8 +162,18 @@ export class Holdable extends Entity {
             }
         }
         // Wood becomes a fish if it hits a house
-        if (this.holdableType === 'wood' && other instanceof House) {
+        else if (this.holdableType === 'wood' && other instanceof House) {
             this.holdableType = 'fish';
+            // bounce back
+            bounce = true;
+
+            if (!this.game.isServer) {
+                Sounds.playSound('walk', { volume: 0.5 });
+            }
+        }
+        // Fish becomes a painted fish if it hits a house
+        else if (this.holdableType === 'fish' && other instanceof House) {
+            this.holdableType = 'painted-fish';
             // bounce back
             bounce = true;
 
@@ -168,7 +183,7 @@ export class Holdable extends Entity {
         }
 
         // Wool becomes a small wool if it hits a mon
-        if (this.holdableType === 'wool' && other instanceof Mon) {
+        else if (this.holdableType === 'wool' && other instanceof Mon) {
             if (this.game.isServer) {
 
                 console.log('make wool?');
@@ -193,8 +208,14 @@ export class Holdable extends Entity {
                 Sounds.playSound('walk', { volume: 0.5 });
             }
         }
+        // Rocks kill mons :(
+        else if (this.holdableType === 'rock' && other instanceof Mon) {
+            other.done = true;
 
-
+            if (!this.game.isServer) {
+                Sounds.playSound('explode', { volume: 0.3 });
+            }
+        }
 
         if (bounce) {
             this.dx = -0.5 * this.dx;
