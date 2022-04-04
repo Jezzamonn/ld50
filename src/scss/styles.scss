@@ -79,3 +79,23 @@ h1 {
         margin-block-end: 5px;
     }
 }
+
+.status-bar {
+    position: absolute;
+    top: 100px;
+    right: 6px;
+}
+
+.status-bar-cat {
+    position: absolute;
+    left: -4px;
+    top: -10px;
+
+    transition: top 0.1s;
+}
+
+.status-bar-house {
+    position: absolute;
+    left: -4px;
+    top: 390px;
+}

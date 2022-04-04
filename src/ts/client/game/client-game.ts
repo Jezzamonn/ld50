@@ -117,6 +117,15 @@ export class ClientGame {
         const respawnElem = document.querySelector('.respawn-text');
         respawnElem?.classList.toggle('hidden', !(this.canRespawn && !this.canRestart));
 
+        // Update the status bar too.
+        const cat = this.getCat();
+        const statusBarCat = document.querySelector('.status-bar-cat') as HTMLImageElement;
+        if (statusBarCat && cat) {
+            const maxCatPos = physFromPx(pxWorldHeight) - physFromSpritePx(30);
+            const catAmt = cat.maxY / maxCatPos;
+            statusBarCat.style.top = ((380 * catAmt) - 10).toFixed(2) + 'px';
+        }
+
         this.handlePlayerInput(dt);
 
         for (const ent of this.entities) {
