@@ -1,12 +1,19 @@
 import express from 'express';
-import http from 'http';
+import https from 'https';
+import fs from 'fs';
 import { Server, Socket } from 'socket.io';
 import { seededRandom } from '../common/util';
 import { ServerGame } from './server-game';
 import { LocalStorage } from "node-localstorage";
 
+const port = 443;
+
+const sslDir = '/etc/letsencrypt/live/kit.jezzamon.com/'
+const cert = fs.readFileSync(sslDir + 'fullchain.pem');
+const key = fs.readFileSync(sslDir + 'privkey.pem');
+
 const app = express();
-const server = http.createServer(app);
+const server = https.createServer({ cert, key }, app);
 const io = new Server(server, {
     // Allow all CORS stuff
     cors: {
@@ -67,8 +74,8 @@ setInterval(() => {
     io.emit('update', game.getEntitiesAsObjects());
 }, updatePeriodMs)
 
-server.listen(3000, () => {
-    console.log('Listening on port 3000');
+server.listen(port, () => {
+    console.log(`Listening on port ${port}`);
 });
 
 // Game loop
