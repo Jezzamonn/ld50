@@ -83,7 +83,7 @@ function startGame() {
     game = new ClientGame(keys, rng);
     game.resetFn = () => reset();
 
-    socket = io('http://localhost:3000');
+    socket = io('https://kit.jezzamon.com');
     socket.on('connect', () => {
         console.log('Connected to server');
 
